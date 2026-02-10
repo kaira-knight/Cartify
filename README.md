@@ -37,23 +37,8 @@ It supports user authentication, product browsing, cart management, secure payme
 
 Cartify/
 ├── frontend/
-│ ├── src/
-│ │ ├── app/ # Redux store
-│ │ ├── components/ # Reusable UI components
-│ │ ├── pages/ # Route pages
-│ │ ├── features/ # Redux slices (auth, cart, product)
-│ │ ├── services/ # API services
-│ │ └── utils/ # Helpers & protected routes
-│ └── package.json
 │
 ├── backend/
-│ ├── config/ # DB & Stripe config
-│ ├── controllers/ # Business logic
-│ ├── models/ # MongoDB schemas
-│ ├── routes/ # API routes
-│ ├── middleware/ # Auth & error handling
-│ ├── server.js
-│ └── app.js
 │
 └── README.md
 
