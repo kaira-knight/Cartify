@@ -4,6 +4,8 @@ import crypto from "crypto";
 import generateToken from "../utils/generateToken.js";
 import sendEmail from "../utils/sendEmail.js";
 
+
+
 //Register ->> Sign Up
 export const registerUser=async(req,res)=> {
     try {
