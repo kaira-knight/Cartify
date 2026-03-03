@@ -1,11 +1,11 @@
 import express from "express";
-import { forgotPassword, loginUser, registerUser, resetPassword } from "../controllers/authController.js";
-import protect from "../middleware/authMiddleware.js";
+import { forgotPassword, login, logout, register, resetPassword } from "../controllers/authController.js";
 
 const router=express.Router();
 
-router.post("/register",registerUser);
-router.post("/login",protect,loginUser);
+router.post("/register",register);
+router.post("/login",login);
+router.get("/logout",logout);
 router.post("/forgot-password",forgotPassword);
 router.put("/reset-password/:token",resetPassword);
 
