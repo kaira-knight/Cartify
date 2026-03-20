@@ -1,121 +1,149 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
+/* Reset & Base Header */
+.header-container {
+  width: 100%;
+  font-family: 'Inter', sans-serif; /* You can use 'Poppins' or 'Roboto' as alternatives */
 }
 
-/* ---------------- BLACK BAR ---------------- */
-
-.topbar {
-  background: black;
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10px 20px;
-  position: relative;
+/* 1. Black Top Bar */
+.top-bar {
+  background-color: #000000;
+  color: #ffffff;
+  padding: 12px 0;
   font-size: 14px;
 }
 
-.topbar span {
-  font-weight: 600;
-  cursor: pointer;
+.top-bar-content {
+  max-width: 1170px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  padding: 0 20px;
 }
 
-/* Language Right */
-.lang {
+.top-bar-content p {
+  margin: 0;
+  font-weight: 400;
+}
+
+.shop-now-link {
+  color: #ffffff;
+  font-weight: 600;
+  margin-left: 10px;
+  text-decoration: underline;
+  transition: opacity 0.2s;
+}
+
+.language-selector {
   position: absolute;
-  right: 60px;
+  right: 20px;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   cursor: pointer;
 }
 
-.lang svg {
-  font-size: 12px;
+/* 2. Main White Navbar */
+.main-nav {
+  background-color: #ffffff;
+  border-bottom: 0.5px solid #b3b3b3; /* Thin light line from image */
+  padding: 24px 0 16px 0;
 }
 
-/* ---------------- MAIN NAVBAR ---------------- */
-
-.navbar {
-  background: white;
+.nav-content {
+  max-width: 1170px;
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 18px 40px;
-  border-bottom: 1px solid #eee;
+  padding: 0 20px;
 }
 
-.logo {
-  font-size: 26px;
+.nav-logo {
+  font-size: 24px;
   font-weight: 700;
+  letter-spacing: 1px;
+  margin: 0;
+  color: #000000;
 }
 
-/* Menu */
-.menu {
+/* 3. Navigation Links (Router Links) */
+.nav-links {
+  display: flex;
   list-style: none;
-  display: flex;
-  gap: 30px;
+  gap: 40px;
+  margin: 0;
+  padding: 0;
 }
 
-.menu li {
-  cursor: pointer;
+.nav-links li a {
+  text-decoration: none;
+  color: #000000;
   font-size: 16px;
+  font-weight: 400;
+  position: relative;
+  transition: all 0.3s ease;
 }
 
-.menu li:hover {
-  text-decoration: underline;
+/* Hover effect */
+.nav-links li a:hover {
+  color: #7d8184;
 }
 
-/* Right Section */
-.nav-right {
+/* Specific styling for the 'Sign Up' link underline in your image */
+.active-link {
+  border-bottom: 1px solid #000000;
+  padding-bottom: 2px;
+}
+
+/* 4. Search Bar Area */
+.nav-actions {
   display: flex;
   align-items: center;
-  gap: 16px;
 }
 
-/* Search Box */
-.search-box {
-  background: #f5f5f5;
-  display: flex;
-  align-items: center;
-  padding: 8px 12px;
+.search-wrapper {
+  background-color: #f5f5f5; /* Light grey background */
+  padding: 7px 12px 7px 20px;
   border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 240px;
 }
 
-.search-box input {
+.search-input {
+  background: transparent;
   border: none;
   outline: none;
-  background: transparent;
-  width: 180px;
+  font-size: 13px;
+  width: 100%;
+  color: #000000;
 }
 
-.icon {
-  font-size: 18px;
+.search-input::placeholder {
+  color: #808080;
+}
+
+.search-icon {
   cursor: pointer;
+  color: #000000;
+  transition: transform 0.2s;
 }
 
-/* ---------------- RESPONSIVE ---------------- */
+.search-icon:hover {
+  transform: scale(1.1);
+}
 
+/* Responsive: Hide links on mobile */
 @media (max-width: 900px) {
-  .menu {
+  .nav-links {
     display: none;
   }
-}
-
-@media (max-width: 600px) {
-  .topbar p {
-    font-size: 12px;
-    text-align: center;
-  }
-
-  .search-box {
-    display: none;
-  }
-
-  .navbar {
-    padding: 14px 16px;
+  
+  .top-bar-content p {
+    font-size: 11px;
+    padding-right: 60px;
   }
 }

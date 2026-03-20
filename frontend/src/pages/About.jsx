@@ -1,12 +1,12 @@
-import React from "react";
+import React from 'react'
 
-function Home() {
+const About = () => {
   return (
     <div style={{ padding: "50px", textAlign: "center" }}>
       <h1>Welcome to Exclusive Store</h1>
-      <p>Home Page</p>
+      <p>About Page</p>
     </div>
-  );
+  )
 }
 
-export default Home;
+export default About

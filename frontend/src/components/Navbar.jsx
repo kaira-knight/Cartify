@@ -1,45 +1,89 @@
-import React from "react";
-import { FaSearch, FaHeart, FaShoppingCart, FaChevronDown } from "react-icons/fa";
-import "./Navbar.css";
+import React from 'react';
+import {Link, NavLink } from 'react-router-dom'; // Import Link from react-router-dom
+import { Search, ChevronDown } from 'lucide-react';
+import './Navbar.css';
 
 const Navbar = () => {
   return (
-    <>
-      {/* Top Black Bar */}
-      <div className="topbar">
-        <p>
-          Summer Sale For All Swim Suits And Free Express Delivery - OFF 50%!{" "}
-          <span>ShopNow</span>
-        </p>
-
-        <div className="lang">
-          <span>English</span>
-          <FaChevronDown />
-        </div>
-      </div>
-
-      {/* Main White Navbar */}
-      <div className="navbar">
-        <h2 className="logo">Exclusive</h2>
-
-        <ul className="menu">
-          <li>Home</li>
-          <li>Contact</li>
-          <li>About</li>
-          <li>Sign Up</li>
-        </ul>
-
-        <div className="nav-right">
-          <div className="search-box">
-            <input type="text" placeholder="What are you looking for?" />
-            <FaSearch />
+    <header className="header-container">
+      {/* Top Announcement Bar */}
+      <div className="top-bar">
+        <div className="top-bar-content">
+          <p>
+            Summer Sale For All Swim Suits And Free Express Delivery - OFF 50%! 
+            <Link to="/shop" className="shop-now-link">ShopNow</Link>
+          </p>
+          <div className="language-selector">
+            <span>English</span>
+            <ChevronDown size={14} />
           </div>
-
-          <FaHeart className="icon" />
-          <FaShoppingCart className="icon" />
         </div>
       </div>
-    </>
+
+      {/* Main Navigation Bar */}
+      <nav className="main-nav">
+        <div className="nav-content">
+          <h1 className="nav-logo">Exclusive</h1>
+          
+          <ul className="nav-links">
+  <li>
+    <NavLink
+      to="/"
+      className={({ isActive }) =>
+        isActive ? "underline text-red-500" : ""
+      }
+    >
+      Home
+    </NavLink>
+  </li>
+
+  <li>
+    <NavLink
+      to="/contact"
+      className={({ isActive }) =>
+        isActive ? "underline text-red-500" : ""
+      }
+    >
+      Contact
+    </NavLink>
+  </li>
+
+  <li>
+    <NavLink
+      to="/about"
+      className={({ isActive }) =>
+        isActive ? "underline text-red-500" : ""
+      }
+    >
+      About
+    </NavLink>
+  </li>
+
+  <li>
+    <NavLink
+      to="/signup"
+      className={({ isActive }) =>
+        isActive ? "underline text-red-500" : ""
+      }
+    >
+      Sign Up
+    </NavLink>
+  </li>
+</ul>
+
+          <div className="nav-actions">
+            <div className="search-wrapper">
+              <input 
+                type="text" 
+                placeholder="What are you looking for?" 
+                className="search-input"
+              />
+              <Search size={18} className="search-icon" />
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
   );
 };
 
