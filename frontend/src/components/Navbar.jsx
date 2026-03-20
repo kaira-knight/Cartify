@@ -29,8 +29,9 @@ const Navbar = () => {
   <li>
     <NavLink
       to="/"
+      end
       className={({ isActive }) =>
-        isActive ? "underline text-red-500" : ""
+        isActive ? "border-b-2 border-red-500 pb-1" : ""
       }
     >
       Home
@@ -41,7 +42,7 @@ const Navbar = () => {
     <NavLink
       to="/contact"
       className={({ isActive }) =>
-        isActive ? "underline text-red-500" : ""
+        isActive ? "border-b-2 border-red-500 pb-1" : ""
       }
     >
       Contact
@@ -52,8 +53,8 @@ const Navbar = () => {
     <NavLink
       to="/about"
       className={({ isActive }) =>
-        isActive ? "underline text-red-500" : ""
-      }
+        isActive ? "border-b-2 border-red-500 pb-1" : ""
+      } 
     >
       About
     </NavLink>
@@ -63,7 +64,7 @@ const Navbar = () => {
     <NavLink
       to="/signup"
       className={({ isActive }) =>
-        isActive ? "underline text-red-500" : ""
+        isActive ? "border-b-2 border-red-500 pb-1" : ""
       }
     >
       Sign Up
