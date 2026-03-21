@@ -40,7 +40,8 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Login.css';
 
-const LoginPage = () => {
+const LoginPage = ({setUser}) => {
+
   const [formData, setFormData] = useState({
     emailOrPhone: '',
     password: ''
@@ -48,9 +49,15 @@ const LoginPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Login details:", formData);
-  };
 
+    // Simulate a login
+    const loggedInUser = { email: formData.emailOrPhone, name: "User" };
+    
+    // 4. This updates the state in App.js
+    setUser(loggedInUser); 
+    console.log("Logged in!");
+  };
+  
   return (
     <div className="login-container">
       {/* Left Part: Image/Illustration */}
