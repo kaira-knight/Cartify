@@ -115,7 +115,7 @@ export const login = async (req, res) => {
     return res.json({ success: true, message: "Login Successful" });
 
   } catch (error) {
-    return res.json({ success: false, message: error.message });
+    return res.json({ success: false, message: `Login Error ${error.message}` });
   }
 };
 
@@ -131,7 +131,7 @@ export const logout = async (req, res) => {
     return res.json({ success: true, message: "Logged Out" });
 
   } catch (error) {
-    return res.json({ success: false, message: error.message });
+    return res.json({ success: false, message: `Logut Error ${error.message}` });
   }
 };
 
