@@ -56,7 +56,7 @@ const Footer = () => {
           <div className="download-wrapper">
             <div className="qr-placeholder">
               {/* Actual QR Image would go here */}
-              <div className="qr-box">QR CODE</div>
+              <div className="qr-box"><img src="https://play-lh.googleusercontent.com/nJcgTrETflv8liaA-3zrv7po7NyfKDMpMswbazxx6oWGnNAzT4D1mPniyX0nOrE-YnaV=w480-h960-rw"/></div>
             </div>
             <div className="store-buttons">
               <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play" />

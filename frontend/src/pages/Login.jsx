@@ -56,7 +56,7 @@ const LoginPage = () => {
       {/* Left Part: Image/Illustration */}
       <div className="login-left">
         <img 
-          src="https://cdn.dribbble.com/userupload/43929959/file/original-47a5da990dfc790e19907cecf9f32503.png?resize=752x&vertical=center" 
+          src="https://images.unsplash.com/photo-1607082349566-187342175e2f" 
           alt="Shopping Illustration" 
           className="login-image"
         />
