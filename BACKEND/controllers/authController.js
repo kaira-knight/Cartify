@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import generateToken from "../utils/generateToken.js";
 import sendEmail from "../utils/sendEmail.js";
+import { sendSms } from "../utils/sendSms.js";
 
 
 
@@ -135,77 +136,220 @@ export const logout = async (req, res) => {
   }
 };
 
+//FORGOT AND RESET PASWWORD REQUIRE   3 steps
+//1.SEND OTP
+//2.VERIFY OTP
+//3.RESET PASSWORD
 
 
-export const forgotPassword=async(req,res)=>{
-    try {
-        const {email}=req.body;
+export const sendOtp=async(req,res)=>{
+  try{
+    const {identifier}=req.body;
 
-        const user=await User.findOne( {email });
-
-        if(!user){
-            return res.status(400).json( {
-                message:"Users Not Found"
-            });
-        }
-        const resetToken=crypto.randomBytes(20).toString("hex");
-        user.resetPasswordToken=crypto.createHash("sha256").update(resetToken).digest("hex");
-
-        user.resetPasswordExpire=Date.now()+15*60*1000;
-
-        await user.save();
-
-        const resetURL= `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
-
-        await sendEmail({
-            email:user.email,
-            subject:"Password Reset",
-            message:`Click here to reset password: ${resetURL}`,
-        });
-
-        res.json({
-            message:"Reset Link to set to email"
-        });
-
-
-
+    if(!identifier){
+      return res.status(400).json({
+        success: false,
+        message:"Email or Phone Required",
+      });
     }
-    catch(error){
-        res.status(500).json({
-            message:error.message
-        })
-    }
-};
 
-//Reset-Password
+    const user=await User.findOne({
+      $or:[{email: identifier}, {phone:identifier}],
+    });
+
+    if(!user){
+      return res.status(400).json({
+        success: false,
+        message:"User Not Found",
+
+      });
+    }
+
+    //Generate Otp
+
+    const otp=Math.floor(100000+Math.random()*900000).toString();
+
+    user.otp=otp;
+    user.otpExpire=Date.now()+5*60*1000; //5 minutes
+    await user.save();
+
+
+      let result;
+
+    // 📧 EMAIL FLOW
+    if (user.email === identifier) {
+      await sendEmail(
+        user.email,
+        "Password Reset OTP",
+        `Your OTP is ${otp}`
+      );
+
+      result = {
+        success: true,
+        message: "OTP sent to email",
+      };
+    }
+
+    // 📱 PHONE FLOW
+    else if (user.phone === identifier) {
+      const smsRes = await sendSms(user.phone, otp);
+
+      if (!smsRes.success) {
+        return res.status(500).json({
+          success: false,
+          message: "Failed to send OTP via SMS",
+        });
+      }
+
+      result = {
+        success: true,
+        message: "OTP sent to phone",
+      };
+    }
+
+    return res.status(200).json(result);
+
+  }
+  catch(error){
+     return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+
+  }
+}
+
+
+//Step2-> //Verify OTP
+
+export const verifyOtp=async(req,res)=>{
+  try{
+    const {identifier,otp}=req.body
+
+    //Validation
+    if(!identifier || !otp){
+      return res.status(400).json({
+        success:false,
+        message:"Email/Phone and OTP required",
+      });
+    }
+
+    //Find User
+    const user=await User.findOne({
+      $or:[{email:identifier},{phone:identifier}],
+    });
+
+    if(!user){
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    //No otp stored 
+     if (!user.otp) {
+      return res.status(400).json({
+        success: false,
+        message: "No OTP found. Please request again",
+      });
+    }
+
+    //Check expiry
+
+     if (user.otpExpire < Date.now()) {
+      return res.status(400).json({
+        success: false,
+        message: "OTP expired",
+      });
+    }
+
+    //Otp Match Check
+
+    if (user.otp !== otp) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid OTP",
+      });
+    }
+
+    user.isOtpVerified=true;
+
+    await user.save();
+
+     return res.status(200).json({
+      success: true,
+      message: "OTP verified successfully",
+    });
+  }
+  catch(error){
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+
+
+  }
+}
+
+//Step3->> Reset Password
 export const resetPassword=async(req,res)=>{
-    try {
-        const resetToken=crypto.createHash("sha256").update(req.params.token).digest("hex");
+  try{
+    const {identifier,newPassword}=req.body;
 
-        const user=await User.findOne({
-            resetPasswordToken: resetToken,
-            resetPasswordExpire:{$gt: Date.now()},
-        });
-
-        if(!user){
-            return res.status(400).json({
-                message:"Invalid or expired Token"
-            });
-        }
-        user.password=await bcrypt.hash(req.body.password,10);
-        user.resetPasswordToken=undefined;
-        user.resetPasswordExpire=undefined;
-
-        await user.save();
-
-        res.json({message:"Password Reset Successful"});
+     if (!identifier || !newPassword) {
+      return res.status(400).json({
+        success: false,
+        message: "Email/Phone and new password required",
+      });
     }
-    catch(error){
-        res.status(500).json({
-            message:error.message
-        })
+
+     const user = await User.findOne({
+      $or: [{ email: identifier }, { phone: identifier }],
+    });
+
+     if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
     }
-} ;
+
+    if (!user.isOtpVerified || user.otpExpire<Date.now()) {
+      return res.status(403).json({
+        success: false,
+        message: "OTP verification required",
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+
+    user.otp = null;
+    user.otpExpire = null;
+    user.isOtpVerified = false;
+
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Password reset successfully",
+    });
+  }
+
+  catch(error){
+    return res.status(500).json({
+      success: false,
+      message: `Reset Password Error${error.message}`,
+    });
+
+  }
+}
+
+
+
+
+
+
 
 
 
