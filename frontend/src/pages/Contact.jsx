@@ -18,7 +18,7 @@ function Contact() {
             <p className="text-gray-500 text-sm">
               We are available 24/7, 7 days a week.
             </p>
-            <p className="mt-2 text-sm">Phone: +8801611112222</p>
+            <p className="mt-2 text-sm">Phone: +91 9234623044</p>
           </div>
 
           <hr className="my-4" />

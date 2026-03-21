@@ -1,25 +1,20 @@
 .login-container {
   display: flex;
   min-height: 80vh;
-  align-items: center;
+  /* align-items: center; */
   font-family: 'Inter', sans-serif;
-  margin-top: 60px; /* Space from navbar */
-  margin-bottom: 60px;
 }
 
 /* Left Section */
 .login-left {
-  flex: 1.2;
-  background-color: #CBE4E8; /* Light blue background from image */
+    flex: 1;
   display: flex;
-  justify-content: flex-end;
-  height: 100%;
+  align-items: center;
+  justify-content: center;
 }
 
-.login-image {
-  max-width: 100%;
-  height: auto;
-  object-fit: contain;
+.login-left img {
+  width: 100%;
 }
 
 /* Right Section */
@@ -28,7 +23,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 40px;
+  padding: 10px;
 }
 
 .form-wrapper {
