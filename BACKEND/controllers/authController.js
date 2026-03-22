@@ -27,10 +27,13 @@ export const register = async (req, res) => {
     });
 
     if (existingUser) {
-      return res.json({
-        success: false,
-        message: "User already exists",
-      });
+      // Provide specific feedback on WHICH field is taken
+      if (existingUser.email === email) {
+        return res.status(409).json({ message: "Email already registered" });
+      }
+      if (existingUser.phone === phone) {
+        return res.status(409).json({ message: "Phone already registered" });
+      }
     }
 
     // Hash Password
