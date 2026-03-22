@@ -1,7 +1,9 @@
-import nodemailer from "nodemailer";
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-   host: "smtp.gmail.com", // Often good to be explicit
+import nodeMailer from "nodemailer"
+import dotenv from "dotenv"
+dotenv.config()
+
+const transporter = nodeMailer.createTransport({
+  service: "Gmail",
   port: 465,
   secure: true, // Use true for port 465, false for port 587
   auth: {
@@ -10,13 +12,14 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-transporter.verify(function (error, success) {
-  if (error) {
-    console.error("Nodemailer Transporter Connection Error:", error.message);
-    // You might want to exit the process or handle this more gracefully in production
-  } else {
-    console.log("Nodemailer Transporter is ready to send emails!");
-  }
-});
+const sendMail=async (to,otp)=>{
+    await transporter.sendMail({
+        from:`${process.env.EMAIL}`,
+        to,
+        subject: "Reset Your Password",
+        html: `<p>Your OTP for password reset is <b>${otp}</b>.
+        It expires in 5 minutes</p>`
+    })
+}
 
-export default transporter;
+export default sendMail

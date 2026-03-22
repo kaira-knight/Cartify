@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import generateToken from "../utils/generateToken.js";
-import sendEmail from "../utils/sendEmail.js";
+import sendEmail from "../config/email.js"
 import { sendSms } from "../utils/sendSms.js";
 
 
@@ -182,9 +182,7 @@ export const sendOtp=async(req,res)=>{
     // 📧 EMAIL FLOW
     if (user.email === identifier) {
       await sendEmail(
-        user.email,
-        "Password Reset OTP",
-        `Your OTP is ${otp}`
+        user.email,otp
       );
 
       result = {
