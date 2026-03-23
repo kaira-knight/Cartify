@@ -198,7 +198,7 @@ export const sendOtp=async(req,res)=>{
       if (!smsRes.success) {
         return res.status(500).json({
           success: false,
-          message: "Failed to send OTP via SMS",
+          message: message,
         });
       }
 
