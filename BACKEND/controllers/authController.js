@@ -191,22 +191,22 @@ export const sendOtp=async(req,res)=>{
       };
     }
 
-    // 📱 PHONE FLOW
-    else if (user.phone === identifier) {
-      const smsRes = await sendSms(user.phone, otp);
+ // 📱 PHONE FLOW
+else if (user.phone === identifier) {
+  const smsRes = await sendSms(user.phone, otp);
 
-      if (!smsRes.success) {
-        return res.status(500).json({
-          success: false,
-          message: message,
-        });
-      }
+  if (!smsRes.success) {
+    return res.status(500).json({
+      success: false,
+      message: smsRes.message,  // Fixed: was 'message' -> smsRes.message
+    });
+  }
 
-      result = {
-        success: true,
-        message: "OTP sent to phone",
-      };
-    }
+  result = {
+    success: true,
+    message: "OTP sent to phone",
+  };
+}
 
     return res.status(200).json(result);
 
