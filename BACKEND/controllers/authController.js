@@ -145,80 +145,83 @@ export const logout = async (req, res) => {
 //3.RESET PASSWORD
 
 
-export const sendOtp=async(req,res)=>{
-  try{
-    const {identifier}=req.body;
+export const sendOtp = async (req, res) => {
+  try {
+    const { identifier } = req.body;
 
-    if(!identifier){
+    if (!identifier) {
       return res.status(400).json({
         success: false,
-        message:"Email or Phone Required",
+        message: "Email or Phone Required",
       });
     }
 
-    const user=await User.findOne({
-      $or:[{email: identifier}, {phone:identifier}],
+    const user = await User.findOne({
+      $or: [{ email: identifier }, { phone: identifier }],
     });
 
-    if(!user){
+    if (!user) {
       return res.status(400).json({
         success: false,
-        message:"User Not Found",
-
+        message: "User Not Found",
       });
     }
 
-    //Generate Otp
-
-    const otp=Math.floor(100000+Math.random()*900000).toString();
-
-    user.otp=otp;
-    user.otpExpire=Date.now()+5*60*1000; //5 minutes
+    // Generate OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    user.otp = otp;
+    user.otpExpire = Date.now() + 5 * 60 * 1000; // 5 minutes
     await user.save();
 
-
-      let result;
+    let result;
 
     // 📧 EMAIL FLOW
     if (user.email === identifier) {
-      await sendEmail(
-        user.email,otp
-      );
-
+      await sendEmail(user.email, otp);
       result = {
         success: true,
         message: "OTP sent to email",
       };
     }
+    // 📱 PHONE FLOW — but only if SMS is available
+    else if (user.phone === identifier) {
+      // ⚠️ Check if SMS can actually be sent
+      if (!process.env.SMS_API_KEY || process.env.SMS_API_KEY.trim() === "") {
+        return res.status(400).json({
+          success: false,
+          message: "SMS service unavailable. Please try with your email.",
+        });
+      }
 
- // 📱 PHONE FLOW
-else if (user.phone === identifier) {
-  const smsRes = await sendSms(user.phone, otp);
+      try {
+        const smsRes = await sendSms(user.phone, otp);
 
-  if (!smsRes.success) {
-    return res.status(500).json({
-      success: false,
-      message: smsRes.message,  // Fixed: was 'message' -> smsRes.message
-    });
-  }
+        if (!smsRes.success) {
+          throw new Error(smsRes.message || "SMS sending failed");
+        }
 
-  result = {
-    success: true,
-    message: "OTP sent to phone",
-  };
-}
+        result = {
+          success: true,
+          message: "OTP sent to phone",
+        };
+      } catch (smsError) {
+        // Any SMS failure → graceful fallback
+        return res.status(400).json({
+          success: false,
+          message: "Unable to send SMS. Please try with your email.",
+        });
+      }
+    }
 
     return res.status(200).json(result);
-
-  }
-  catch(error){
-     return res.status(500).json({
+  } catch (error) {
+    console.error("Send OTP Error:", error); // 👈 Always log server errors
+    return res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Something went wrong. Please try again later.",
     });
-
   }
-}
+};
 
 
 //Step2-> //Verify OTP
