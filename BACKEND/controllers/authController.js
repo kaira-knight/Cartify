@@ -44,6 +44,7 @@ export const register = async (req, res) => {
       email,
       phone,
       password: hashedPassword,
+      role
     });
 
     // Generate Token

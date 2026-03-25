@@ -7,9 +7,9 @@ const userSchema=new mongoose.Schema(
             required: true,
         },
         email: {
-        type: String,
-        unique: true,
-        sparse: true,
+            type: String,
+            unique: true,
+            sparse: true,
         },
 
          phone: {
@@ -27,10 +27,14 @@ const userSchema=new mongoose.Schema(
          otpExpire: Date,
 
          isOtpVerified: {
-         type: Boolean,
-         default: false
+            type: Boolean,
+            default: false
         },
-
+        role: {
+            type: String,
+            enum: ["Customer", "Seller", "Admin"], 
+            default: "Customer" // default role
+        }
     },
     {timestamps: true}
 );
