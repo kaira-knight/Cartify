@@ -36,75 +36,223 @@
 // };
 
 // export default Login;
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import './Login.css';
+// import React, { useState } from 'react';
+// import { Link } from 'react-router-dom';
+// import './Login.css';
 
-const LoginPage = ({setUser}) => {
+// const LoginPage = ({setUser}) => {
+
+//   const [formData, setFormData] = useState({
+//     emailOrPhone: '',
+//     password: ''
+//   });
+
+//   const handleSubmit = (e) => {
+//     e.preventDefault();
+
+//     // Simulate a login
+//     const loggedInUser = { email: formData.emailOrPhone, name: "User" };
+    
+//     // 4. This updates the state in App.js
+//     setUser(loggedInUser); 
+//     console.log("Logged in!");
+//   };
+  
+//   return (
+//     <div className="login-container">
+//       {/* Left Part: Image/Illustration */}
+//       <div className="login-left">
+//         <img 
+//           src="https://images.unsplash.com/photo-1607082349566-187342175e2f" 
+//           alt="Shopping Illustration" 
+//           className="login-image"
+//         />
+//       </div>
+
+//       {/* Right Part: Login Form */}
+//       <div className="login-right">
+//         <div className="form-wrapper">
+//           <h2 className="login-title">Log in to Exclusive</h2>
+//           <p className="login-subtitle">Enter your details below</p>
+          
+//           <form onSubmit={handleSubmit} className="login-form">
+//             <div className="input-group">
+//               <input 
+//                 type="text" 
+//                 placeholder="Email or Phone Number"
+//                 value={formData.emailOrPhone}
+//                 onChange={(e) => setFormData({...formData, emailOrPhone: e.target.value})}
+//                 required
+//               />
+//             </div>
+            
+//             <div className="input-group">
+//               <input 
+//                 type="password" 
+//                 placeholder="Password"
+//                 value={formData.password}
+//                 onChange={(e) => setFormData({...formData, password: e.target.value})}
+//                 required
+//               />
+//             </div>
+
+//             <div className="form-actions">
+//               <button type="submit" className="login-btn">Log In</button>
+//               <Link to="/forgot-password" title="Forget Password?" className="forgot-link">
+//                 Forget Password?
+//               </Link>
+//             </div>
+//           </form>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default LoginPage;
+import React, { useState } from "react";
+import { toast } from "react-toastify";
+import { Link, useNavigate } from "react-router-dom"; // ⭐ CHANGED
+import "./Login.css";
+
+const LoginPage = ({ setUser }) => {
+
+  const navigate = useNavigate(); // ⭐ NEW
 
   const [formData, setFormData] = useState({
-    emailOrPhone: '',
-    password: ''
+    emailOrPhone: "",
+    password: "",
+    role: "customer" // ⭐ NEW
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Simulate a login
-    const loggedInUser = { email: formData.emailOrPhone, name: "User" };
-    
-    // 4. This updates the state in App.js
-    setUser(loggedInUser); 
-    console.log("Logged in!");
+  if (!formData.emailOrPhone || !formData.password) {
+    toast.error("Please fill all fields");
+    return;
+  }
+
+
+    const loggedInUser = {
+      email: formData.emailOrPhone,
+      name: "User",
+      role: formData.role // ⭐ CHANGED
+    };
+
+    setUser(loggedInUser);
+toast.success(
+  `${formData.role.charAt(0).toUpperCase() + formData.role.slice(1)} login successful`
+);
+    console.log("Logged in:", loggedInUser);
+
+    // ⭐ NEW REDIRECT
+
+    if (formData.role === "customer") {
+      navigate("/customer-dashboard");
+    }
+
+    if (formData.role === "seller") {
+      navigate("/seller-dashboard");
+    }
+
+    if (formData.role === "buyer") {
+      navigate("/buyer-dashboard");
+    }
   };
-  
+
   return (
     <div className="login-container">
-      {/* Left Part: Image/Illustration */}
+
       <div className="login-left">
-        <img 
-          src="https://images.unsplash.com/photo-1607082349566-187342175e2f" 
-          alt="Shopping Illustration" 
-          className="login-image"
+        <img
+          src="https://images.unsplash.com/photo-1607082349566-187342175e2f"
+          alt="Shopping"
         />
       </div>
 
-      {/* Right Part: Login Form */}
       <div className="login-right">
         <div className="form-wrapper">
-          <h2 className="login-title">Log in to Exclusive</h2>
-          <p className="login-subtitle">Enter your details below</p>
-          
+
+          <h2 className="login-title">
+            Log in to Exclusive
+          </h2>
+
+          <p className="login-subtitle">
+            Enter your details below
+          </p>
+
           <form onSubmit={handleSubmit} className="login-form">
+
             <div className="input-group">
-              <input 
-                type="text" 
+              <input
+                type="text"
                 placeholder="Email or Phone Number"
                 value={formData.emailOrPhone}
-                onChange={(e) => setFormData({...formData, emailOrPhone: e.target.value})}
-                required
-              />
-            </div>
-            
-            <div className="input-group">
-              <input 
-                type="password" 
-                placeholder="Password"
-                value={formData.password}
-                onChange={(e) => setFormData({...formData, password: e.target.value})}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    emailOrPhone: e.target.value
+                  })
+                }
                 required
               />
             </div>
 
+            <div className="input-group">
+              <input
+                type="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    password: e.target.value
+                  })
+                }
+                required
+              />
+            </div>
+
+            {/* ⭐ NEW ROLE DROPDOWN */}
+
+            <select
+              value={formData.role}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  role: e.target.value
+                })
+              }
+            >
+              <option value="customer">Customer</option>
+              <option value="seller">Seller</option>
+              <option value="buyer">Buyer</option>
+            </select>
+
             <div className="form-actions">
-              <button type="submit" className="login-btn">Log In</button>
-              <Link to="/forgot-password" title="Forget Password?" className="forgot-link">
+
+              <button
+                type="submit"
+                className="login-btn"
+              >
+                Log In
+              </button>
+
+              <Link
+                to="/forgot-password"
+                className="forgot-link"
+              >
                 Forget Password?
               </Link>
+
             </div>
+
           </form>
+
         </div>
       </div>
+
     </div>
   );
 };
