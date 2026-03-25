@@ -98,6 +98,8 @@
 
 import React, { useState } from 'react';
  import {Link, NavLink } from 'react-router-dom'; // Import Link from react-router-dom
+
+ 
 import { Search, ChevronDown, User, Heart, ShoppingCart, Briefcase, XCircle, Star, LogOut } from 'lucide-react';
 import './Navbar.css';
 
