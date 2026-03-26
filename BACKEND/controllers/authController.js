@@ -11,7 +11,7 @@ import client from "../config/googleClient.js";
 //Register ->> Sign Up
 export const register = async (req, res) => {
   try {
-    const { name, email, phone, password } = req.body;
+    const { name, email, phone, password ,role} = req.body;
 
     // Validation
     if (!name || (!email && !phone) || !password) {
