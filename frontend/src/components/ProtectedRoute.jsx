@@ -5,7 +5,7 @@ const ProtectedRoute = ({
   user,
   role,
   children
-}) => {
+}) => { 
 
   if (!user) {
     return <Navigate to="/login" />;

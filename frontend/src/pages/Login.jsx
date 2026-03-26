@@ -114,7 +114,7 @@ import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom"; // ⭐ CHANGED
 import "./Login.css";
-
+ 
 const LoginPage = ({ setUser }) => {
 
   const navigate = useNavigate(); // ⭐ NEW
@@ -225,9 +225,9 @@ toast.success(
                 })
               }
             >
-              <option value="customer">Customer</option>
-              <option value="seller">Seller</option>
-              <option value="buyer">Buyer</option>
+              <option value="Customer">Customer</option>
+              <option value="Seller">Seller</option>
+              <option value="Admin">Admin</option>
             </select>
 
             <div className="form-actions">
