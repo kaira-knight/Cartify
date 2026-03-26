@@ -75,3 +75,27 @@ npm run dev
 - Cloud image uploads
 
 Built with ❤️ as a full-stack MERN project for learning and production-grade practice.
+
+
+
+
+
+env
+
+
+
+
+
+
+
+MONGO_URI=mongodb+srv://manishvidya1352_db_user:VpM87KW1xkBXH5aJ@cluster0.wswrijn.mongodb.net/
+JWT_SECRET=06ef5696349d75ab328aa59fde8538c4
+PORT=8000
+FRONTEND_URL=http://localhost:5173
+
+EMAIL=manyasit537@gmail.com
+EMAIL_PASS=agrz msdf ufeb cseu
+NODE_ENV="developer"
+FAST2SMS_API_KEY=0FpEGoP8fmYc15z9OXBs2RVh37SWUA6aHgDqIkbwZMLlj4nTJxuPRaoWfp9cz3Mxeq5hIEkXZr6isCTl
+SMS_API_KEY=
+GOOGLE_CLIENT_ID="457362271121-884c7c6gh96brv09tninlatnk4q9kisv.apps.googleusercontent.com"
