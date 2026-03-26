@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "./Signup.css";
-import { GoogleLogin } from "@react-oauth/google";
+import { useGoogleLogin } from '@react-oauth/google';  
 import { googleAuth } from "../utils/api";
-import { googleLogin } from "../../../BACKEND/controllers/authController";
+
 
 function Signup() {
 
@@ -33,107 +33,69 @@ function Signup() {
   const validatePassword = (password) => {
     const passwordRegex =
       /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$/;
-
     return passwordRegex.test(password);
   };
 
   // HANDLE SIGNUP
 
   const handleSignup = () => {
-
-    const {
-      name,
-      email,
-      password,
-      confirmPassword
-    } = formData;
-
-    // EMPTY FIELD CHECK
+    const { name, email, password, confirmPassword } = formData;
 
     if (!name || !email || !password || !confirmPassword) {
       toast.error("Please fill all fields");
       return;
     }
 
-    // PASSWORD MATCH CHECK
-
     if (password !== confirmPassword) {
       toast.error("Passwords do not match");
       return;
     }
 
-    // PASSWORD RULE CHECK
-
     if (!validatePassword(password)) {
-
       toast.error(
         "Password must be at least 8 characters, include 1 uppercase letter, 1 number, and 1 special character"
       );
-
       return;
     }
 
-    // CHECK IF USER ALREADY EXISTS
+    const existingUser = JSON.parse(localStorage.getItem("user"));
 
-    const existingUser =
-      JSON.parse(localStorage.getItem("user"));
-
-    if (existingUser &&
-        existingUser.email === email) {
-
-      toast.error(
-        "User already exists with this email"
-      );
-
+    if (existingUser && existingUser.email === email) {
+      toast.error("User already exists with this email");
       return;
     }
-
-    // SAVE USER
 
     localStorage.setItem(
       "user",
-      JSON.stringify({
-        name,
-        email,
-        password
-      })
+      JSON.stringify({ name, email, password })
     );
 
-    console.log("Account created:", formData);
-
-    // SUCCESS MESSAGE
-
-    toast.success(
-      "Account created successfully"
-    );
-
-    // REDIRECT
+    toast.success("Account created successfully");
 
     setTimeout(() => {
       navigate("/login");
     }, 2000);
-
   };
 
-
-
-<GoogleLogin
-  onSuccess={async (res) => {
-    const result = await googleAuth(res.credential);
-    console.log(result);
-  }}
-  onError={() => console.log("Login Failed")}
-/>
-
-
-
-
+const handleGoogleSignup = useGoogleLogin({
+  onSuccess: async (tokenResponse) => {
+    try {
+      const result = await googleAuth(tokenResponse.access_token);
+      console.log(result);
+      toast.success("Google signup successful");
+      navigate("/");
+    } catch (error) {
+      console.error(error);
+      toast.error("Google signup failed");
+    }
+  },
+  onError: () => toast.error("Google signup failed"),
+});
 
   return (
     <div className="signup-container">
 
       {/* LEFT IMAGE */}
-
       <div className="left">
         <img
           src="https://images.unsplash.com/photo-1607082349566-187342175e2f"
@@ -142,16 +104,11 @@ function Signup() {
       </div>
 
       {/* RIGHT FORM */}
-
       <div className="right">
-
         <div className="form-box">
 
           <h2>Create an account</h2>
-
           <p>Enter your details below</p>
-
-          {/* NAME */}
 
           <input
             type="text"
@@ -161,8 +118,6 @@ function Signup() {
             onChange={handleChange}
           />
 
-          {/* EMAIL */}
-
           <input
             type="text"
             name="email"
@@ -170,8 +125,6 @@ function Signup() {
             value={formData.email}
             onChange={handleChange}
           />
-
-          {/* PASSWORD */}
 
           <input
             type="password"
@@ -181,8 +134,6 @@ function Signup() {
             onChange={handleChange}
           />
 
-          {/* CONFIRM PASSWORD */}
-
           <input
             type="password"
             name="confirmPassword"
@@ -191,62 +142,37 @@ function Signup() {
             onChange={handleChange}
           />
 
-          {/* PASSWORD RULES */}
-
           <p className="password-rules">
             Password must contain:
-            <br />
-            • Minimum 8 characters
-            <br />
-            • 1 uppercase letter
-            <br />
-            • 1 number
-            <br />
-            • 1 special character
+            <br />• Minimum 8 characters
+            <br />• 1 uppercase letter
+            <br />• 1 number
+            <br />• 1 special character
           </p>
 
-          {/* BUTTON */}
-
-          <button
-            className="signup-btn"
-            onClick={handleSignup}
-          >
+          <button className="signup-btn" onClick={handleSignup}>
             Create Account
           </button>
 
-          {/* GOOGLE BUTTON */}
-
-          <button className="google-btn"
-          onClick={()=>googleLogin()}>
-
+          {/* ✅ FIXED: Calls the hook function, not the component */}
+          <button
+            className="google-btn"
+            onClick={handleGoogleSignup}
+          >
             <img
               src="https://cdn-icons-png.flaticon.com/512/281/281764.png"
               alt="google"
             />
-
             Sign up with Google
-
           </button>
 
-          {/* LOGIN LINK */}
-
           <p className="login-text">
-
             Already have account?
-
-            <Link
-              to="/login"
-              className="active-link"
-            >
-              {" "}Log in
-            </Link>
-
+            <Link to="/login" className="active-link"> Log in</Link>
           </p>
 
         </div>
-
       </div>
-
     </div>
   );
 }

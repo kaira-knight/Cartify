@@ -349,25 +349,16 @@ export const resetPassword=async(req,res)=>{
 
   }
 }
-
 export const googleLogin = async (req, res) => {
   try {
-    const { token } = req.body;
+    const { name, email, picture, googleId } = req.body;
 
-    if (!token) {
+    if (!email) {
       return res.status(400).json({
         success: false,
-        message: "Token is required",
+        message: "Email is required",
       });
     }
-
-    const ticket = await client.verifyIdToken({
-      idToken: token,
-      audience: process.env.GOOGLE_CLIENT_ID,
-    });
-
-    const payload = ticket.getPayload();
-    const { email, name, picture } = payload;
 
     let user = await User.findOne({ email });
 
@@ -408,13 +399,3 @@ export const googleLogin = async (req, res) => {
     });
   }
 };
-
-
-
-
-
-
-
-
-
-
