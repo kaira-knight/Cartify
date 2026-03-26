@@ -1,25 +1,25 @@
-import React, { createContext, useState } from "react";
+// import React, { createContext, useState } from "react";
 
-export const AuthContext = createContext();
+// export const AuthContext = createContext();
 
-export const AuthProvider = ({ children }) => {
+// export const AuthProvider = ({ children }) => {
 
-  const [user, setUser] = useState(null);
+//   const [user, setUser] = useState(null);
 
-  const login = (role) => {
-    setUser({
-      name: "Prince",
-      role: role
-    });
-  };
+//   const login = (role) => {
+//     setUser({
+//       name: "Prince",
+//       role: role
+//     });
+//   };
 
-  const logout = () => {
-    setUser(null);
-  };
+//   const logout = () => {
+//     setUser(null);
+//   };
 
-  return (
-    <AuthContext.Provider value={{ user, login, logout }}>
-      {children}
-    </AuthContext.Provider>
-  );
-};
+//   return (
+//     <AuthContext.Provider value={{ user, login, logout }}>
+//       {children}
+//     </AuthContext.Provider>
+//   );
+// };
