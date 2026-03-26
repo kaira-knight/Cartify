@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "./Signup.css";
+import { GoogleLogin } from "@react-oauth/google";
+import { googleAuth } from "../utils/api";
+import { googleLogin } from "../../../BACKEND/controllers/authController";
 
 function Signup() {
 
@@ -112,6 +115,20 @@ function Signup() {
 
   };
 
+
+
+<GoogleLogin
+  onSuccess={async (res) => {
+    const result = await googleAuth(res.credential);
+    console.log(result);
+  }}
+  onError={() => console.log("Login Failed")}
+/>
+
+
+
+
+
   return (
     <div className="signup-container">
 
@@ -199,7 +216,8 @@ function Signup() {
 
           {/* GOOGLE BUTTON */}
 
-          <button className="google-btn">
+          <button className="google-btn"
+          onClick={()=>googleLogin()}>
 
             <img
               src="https://cdn-icons-png.flaticon.com/512/281/281764.png"

@@ -6,6 +6,8 @@ import {
   Route
 } from "react-router-dom";
 
+import { GoogleOAuthProvider } from "@react-oauth/google";
+
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 
@@ -26,6 +28,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 function App() {
 
   const [user, setUser] = useState(null);
+
 
   return (
     <Router>
