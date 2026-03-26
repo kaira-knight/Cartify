@@ -1,51 +1,73 @@
-import React from "react";
-import "./Dashboard.css";
+import { Routes, Route } from "react-router-dom";
+
+/* Customer Pages */
+
+import Home from "./Home";
+import Products from "./Products";
+import ProductDetails from "./ProductDetails";
+import Cart from "./Cart";
+import Checkout from "./Checkout";
+import Payment from "./Payment";
+import OrderSuccess from "./OrderSuccess";
+import Orders from "./Orders";
+import Wishlist from "./Wishlist";
+import Profile from "./Profile";
 
 function CustomerDashboard() {
   return (
-    <div className="dashboard-container">
+    <Routes>
 
-      {/* Header */}
+       <Route
+        path="/"
+        element={<Home />}
+      /> 
 
-      <header className="dashboard-header">
-        <h1>Customer Dashboard</h1>
-        <p>
-          Welcome back! Here you can manage your orders,
-          wishlist, and profile.
-        </p>
-      </header>
+      <Route
+        path="products"
+        element={<Products />}
+      />
 
-      {/* Image */}
+      <Route
+        path="product/:id"
+        element={<ProductDetails />}
+      />
 
-      <div className="dashboard-image">
-        <img
-          src="https://images.unsplash.com/photo-1556740738-b6a63e27c4df"
-          alt="Customer Shopping"
-        />
-      </div>
+      <Route
+        path="cart"
+        element={<Cart />}
+      />
 
-      {/* Sections */}
+      <Route
+        path="checkout"
+        element={<Checkout />}
+      />
 
-      <div className="dashboard-cards">
+      <Route
+        path="payment"
+        element={<Payment />}
+      />
 
-        <div className="card">
-          <h3>My Orders</h3>
-          <p>Track your recent purchases</p>
-        </div>
+      <Route
+        path="success"
+        element={<OrderSuccess />}
+      />
 
-        <div className="card">
-          <h3>Wishlist</h3>
-          <p>View saved products</p>
-        </div>
+      <Route
+        path="orders"
+        element={<Orders />}
+      />
 
-        <div className="card">
-          <h3>Profile</h3>
-          <p>Update your personal details</p>
-        </div>
+      <Route
+        path="wishlist"
+        element={<Wishlist />}
+      />
 
-      </div>
+      <Route
+        path="profile"
+        element={<Profile />}
+      />
 
-    </div>
+    </Routes>
   );
 }
 

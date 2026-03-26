@@ -1,12 +1,40 @@
-import React from "react";
+    //  import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
-function Home() {
+const Home = ({ user }) => {
   return (
-    <div style={{ padding: "50px", textAlign: "center" }}>
-      <h1>Welcome to Exclusive Store</h1>
-      <p>Home Page</p>
-    </div>
+     <>
+
+      <section className="bg-blue-600 text-white py-20 text-center">
+        <h1 className="text-4xl font-bold">
+     Big Sale Today
+        </h1>
+      </section>
+
+      <section className="p-6 grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="bg-white p-4 rounded shadow">
+          Electronics
+        </div>
+        <div className="bg-white p-4 rounded shadow">
+          Fashion
+        </div>
+        <div className="bg-white p-4 rounded shadow">
+          Shoes
+        </div>
+        <div className="bg-white p-4 rounded shadow">
+          Watches
+        </div>
+      </section>
+
+      <section className="p-6 grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="bg-white p-4 rounded shadow">
+          Featured Product
+        </div>
+      </section>
+
+      <Footer />
+    </>
   );
-}
+};
 
 export default Home;
