@@ -8,7 +8,14 @@ const app=express();
 
 //Middlewares
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",   // your Vite frontend URL
+    credentials: true,                  // allow cookies
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
 //Routes
 app.use("/api/auth",authRoutes);

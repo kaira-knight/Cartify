@@ -53,7 +53,7 @@
 .login-form {
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 10px;
 }
 
 .input-group input {
