@@ -1,43 +1,56 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useGoogleLogin } from "@react-oauth/google";
+import { useDispatch, useSelector } from "react-redux";       // ✅ NEW
+import { register, googleLogin, clearError, clearMessage } from "../redux/userSlice"; // ✅ NEW
 import "./Signup.css";
-import { useGoogleLogin } from '@react-oauth/google';  
-import { googleAuth } from "../utils/api";
-
 
 function Signup() {
-
   const navigate = useNavigate();
+  const dispatch = useDispatch();                               // ✅ NEW
 
-  // STATE
+  // ✅ NEW — Read state from Redux instead of local
+  const { loading, error, message, isAuthenticated } = useSelector(
+    (state) => state.user
+  );
 
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
   });
 
-  // HANDLE INPUT CHANGE
+  // ✅ NEW — Handle Redux state changes
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+      dispatch(clearError());
+    }
+    if (message && !isAuthenticated) {
+      // Registration success — redirect to login
+      toast.success(message);
+      dispatch(clearMessage());
+      setTimeout(() => navigate("/login"), 2000);
+    }
+    if (isAuthenticated) {
+      // Google signup success — redirect to home
+      toast.success(message || "Signup successful");
+      dispatch(clearMessage());
+      navigate("/");
+    }
+  }, [error, message, isAuthenticated, dispatch, navigate]);
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
-  // PASSWORD VALIDATION FUNCTION
 
   const validatePassword = (password) => {
-    const passwordRegex =
-      /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$/;
-    return passwordRegex.test(password);
+    return /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$/.test(password);
   };
 
-  // HANDLE SIGNUP
-
+  // ========== NORMAL SIGNUP ==========
   const handleSignup = () => {
     const { name, email, password, confirmPassword } = formData;
 
@@ -58,43 +71,21 @@ function Signup() {
       return;
     }
 
-    const existingUser = JSON.parse(localStorage.getItem("user"));
-
-    if (existingUser && existingUser.email === email) {
-      toast.error("User already exists with this email");
-      return;
-    }
-
-    localStorage.setItem(
-      "user",
-      JSON.stringify({ name, email, password })
-    );
-
-    toast.success("Account created successfully");
-
-    setTimeout(() => {
-      navigate("/login");
-    }, 2000);
+    // ✅ CHANGED — Was localStorage, now Redux
+    dispatch(register({ name, email, password }));
   };
 
-const handleGoogleSignup = useGoogleLogin({
-  onSuccess: async (tokenResponse) => {
-    try {
-      const result = await googleAuth(tokenResponse.access_token);
-      console.log(result);
-      toast.success("Google signup successful");
-      navigate("/");
-    } catch (error) {
-      console.error(error);
-      toast.error("Google signup failed");
-    }
-  },
-  onError: () => toast.error("Google signup failed"),
-});
+  // ========== GOOGLE SIGNUP ==========
+  const handleGoogleSignup = useGoogleLogin({
+    onSuccess: (tokenResponse) => {
+      // ✅ CHANGED — Was googleAuth(), now Redux
+      dispatch(googleLogin(tokenResponse.access_token));
+    },
+    onError: () => toast.error("Google signup failed"),
+  });
 
   return (
     <div className="signup-container">
-
       {/* LEFT IMAGE */}
       <div className="left">
         <img
@@ -106,7 +97,6 @@ const handleGoogleSignup = useGoogleLogin({
       {/* RIGHT FORM */}
       <div className="right">
         <div className="form-box">
-
           <h2>Create an account</h2>
           <p>Enter your details below</p>
 
@@ -150,14 +140,19 @@ const handleGoogleSignup = useGoogleLogin({
             <br />• 1 special character
           </p>
 
-          <button className="signup-btn" onClick={handleSignup}>
-            Create Account
+          {/* ✅ CHANGED — Added loading state */}
+          <button
+            className="signup-btn"
+            onClick={handleSignup}
+            disabled={loading}
+          >
+            {loading ? "Creating Account..." : "Create Account"}
           </button>
 
-          {/* ✅ FIXED: Calls the hook function, not the component */}
           <button
             className="google-btn"
             onClick={handleGoogleSignup}
+            disabled={loading}
           >
             <img
               src="https://cdn-icons-png.flaticon.com/512/281/281764.png"
@@ -168,9 +163,10 @@ const handleGoogleSignup = useGoogleLogin({
 
           <p className="login-text">
             Already have account?
-            <Link to="/login" className="active-link"> Log in</Link>
+            <Link to="/login" className="active-link">
+              {" "}Log in
+            </Link>
           </p>
-
         </div>
       </div>
     </div>
