@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";        // ✅ NEW
-import { login, clearError, clearMessage } from "../redux/userSlice"; // ✅ NEW
+import { useDispatch, useSelector } from "react-redux";
+import { login, clearError, clearMessage } from "../redux/userSlice";
 import "./Login.css";
 
-const LoginPage = () => {                                       // ✅ CHANGED — removed setUser prop
+const LoginPage = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();                                // ✅ NEW
+  const dispatch = useDispatch();
 
-  // ✅ NEW — Read from Redux
   const { loading, error, message, isAuthenticated, user } = useSelector(
     (state) => state.user
   );
@@ -17,10 +16,8 @@ const LoginPage = () => {                                       // ✅ CHANGED �
   const [formData, setFormData] = useState({
     emailOrPhone: "",
     password: "",
-    role: "Customer",
   });
 
-  // ✅ NEW — Handle Redux state changes
   useEffect(() => {
     if (error) {
       toast.error(error);
@@ -32,7 +29,7 @@ const LoginPage = () => {                                       // ✅ CHANGED �
       dispatch(clearMessage());
 
       // Redirect based on role
-      if (user.role === "Customer") navigate("/customer-dashboard");
+      if (user.role === "Customer") navigate("/");
       else if (user.role === "Seller") navigate("/seller-dashboard");
       else if (user.role === "Admin") navigate("/admin-dashboard");
       else navigate("/");
@@ -47,14 +44,11 @@ const LoginPage = () => {                                       // ✅ CHANGED �
       return;
     }
 
-    // ✅ CHANGED — Was setUser(), now Redux dispatch
-    dispatch(
-      login({
-        email: formData.emailOrPhone,
-        password: formData.password,
-        role: formData.role,
-      })
-    );
+    // ✅ Send emailOrPhone
+    dispatch(login({
+      emailOrPhone: formData.emailOrPhone,
+      password: formData.password,
+    }));
   };
 
   return (
@@ -68,7 +62,7 @@ const LoginPage = () => {                                       // ✅ CHANGED �
 
       <div className="login-right">
         <div className="form-wrapper">
-          <h2 className="login-title">Log in to Exclusive</h2>
+          <h2 className="login-title">Log in to Cartify</h2>
           <p className="login-subtitle">Enter your details below</p>
 
           <form onSubmit={handleSubmit} className="login-form">
@@ -96,19 +90,7 @@ const LoginPage = () => {                                       // ✅ CHANGED �
               />
             </div>
 
-            <select
-              value={formData.role}
-              onChange={(e) =>
-                setFormData({ ...formData, role: e.target.value })
-              }
-            >
-              <option value="Customer">Customer</option>
-              <option value="Seller">Seller</option>
-              <option value="Admin">Admin</option>
-            </select>
-
             <div className="form-actions">
-              {/* ✅ CHANGED — Added loading state */}
               <button
                 type="submit"
                 className="login-btn"

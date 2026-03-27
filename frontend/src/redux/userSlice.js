@@ -6,12 +6,60 @@ const API = axios.create({
   withCredentials: true,
 });
 
+API.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+const getUserFromStorage = () => {
+  try {
+    const user = localStorage.getItem("user");
+    return user ? JSON.parse(user) : null;
+  } catch (error) {
+    localStorage.removeItem("user");
+    return null;
+  }
+};
+
+const getTokenFromStorage = () => {
+  return localStorage.getItem("token") || null;
+};
+
+// ✅ Helper: Detect if input is email or phone
+const isEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+const isPhone = (value) => /^[0-9]{10,15}$/.test(value);
+
 // ========== REGISTER ==========
 export const register = createAsyncThunk(
   "user/register",
   async (userData, { rejectWithValue }) => {
     try {
-      const { data } = await API.post("/register", userData);
+      const { name, emailOrPhone, password, role } = userData;
+
+      // ✅ Detect and send correct field
+      const payload = {
+        name,
+        password,
+        role: role || "Customer",
+      };
+
+      if (isEmail(emailOrPhone)) {
+        payload.email = emailOrPhone;
+      } else if (isPhone(emailOrPhone)) {
+        payload.phone = emailOrPhone;
+      } else {
+        return rejectWithValue("Please enter a valid email or phone number");
+      }
+
+      const { data } = await API.post("/register", payload);
+
+      if (!data.success) {
+        return rejectWithValue(data.message);
+      }
+
       return data;
     } catch (error) {
       return rejectWithValue(
@@ -26,7 +74,19 @@ export const login = createAsyncThunk(
   "user/login",
   async (userData, { rejectWithValue }) => {
     try {
-      const { data } = await API.post("/login", userData);
+      const { data } = await API.post("/login", {
+        identifier: userData.emailOrPhone,
+        password: userData.password,
+      });
+
+      if (!data.success) {
+        return rejectWithValue(data.message);
+      }
+
+      // ✅ Save to localStorage
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+
       return data;
     } catch (error) {
       return rejectWithValue(
@@ -41,18 +101,24 @@ export const googleLogin = createAsyncThunk(
   "user/googleLogin",
   async (accessToken, { rejectWithValue }) => {
     try {
-      // Step 1: Get user info from Google
       const googleRes = await axios.get(
         "https://www.googleapis.com/oauth2/v3/userinfo",
         { headers: { Authorization: `Bearer ${accessToken}` } }
       );
 
-      // Step 2: Send to your backend
       const { data } = await API.post("/google-login", {
         name: googleRes.data.name,
         email: googleRes.data.email,
         googleId: googleRes.data.sub,
       });
+
+      if (!data.success) {
+        return rejectWithValue(data.message);
+      }
+
+      // ✅ Save to localStorage
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
 
       return data;
     } catch (error) {
@@ -64,21 +130,27 @@ export const googleLogin = createAsyncThunk(
 );
 
 // ========== LOGOUT ==========
-export const logout = createAsyncThunk(
-  "user/logout",
-  async () => {
-    const { data } = await API.post("/logout");
-    return data;
+export const logout = createAsyncThunk("user/logout", async () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+
+  try {
+    await API.post("/logout");
+  } catch (error) {
+    // Ignore
   }
-);
+
+  return { message: "Logged out" };
+});
 
 // ========== SLICE ==========
 const userSlice = createSlice({
   name: "user",
 
   initialState: {
-    user: null,
-    isAuthenticated: false,
+    user: getUserFromStorage(),
+    token: getTokenFromStorage(),
+    isAuthenticated: !!getTokenFromStorage(),
     loading: false,
     error: null,
     message: null,
@@ -95,8 +167,7 @@ const userSlice = createSlice({
 
   extraReducers: (builder) => {
     builder
-
-      // ===== REGISTER =====
+      // REGISTER
       .addCase(register.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -110,7 +181,7 @@ const userSlice = createSlice({
         state.error = action.payload;
       })
 
-      // ===== LOGIN =====
+      // LOGIN
       .addCase(login.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -119,6 +190,7 @@ const userSlice = createSlice({
         state.loading = false;
         state.isAuthenticated = true;
         state.user = action.payload.user;
+        state.token = action.payload.token;
         state.message = action.payload.message;
       })
       .addCase(login.rejected, (state, action) => {
@@ -126,7 +198,7 @@ const userSlice = createSlice({
         state.error = action.payload;
       })
 
-      // ===== GOOGLE LOGIN =====
+      // GOOGLE LOGIN
       .addCase(googleLogin.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -135,6 +207,7 @@ const userSlice = createSlice({
         state.loading = false;
         state.isAuthenticated = true;
         state.user = action.payload.user;
+        state.token = action.payload.token;
         state.message = action.payload.message;
       })
       .addCase(googleLogin.rejected, (state, action) => {
@@ -142,11 +215,13 @@ const userSlice = createSlice({
         state.error = action.payload;
       })
 
-      // ===== LOGOUT =====
+      // LOGOUT
       .addCase(logout.fulfilled, (state) => {
         state.user = null;
+        state.token = null;
         state.isAuthenticated = false;
-        state.message = "Logged out";
+        state.loading = false;
+        state.message = "Logged out successfully";
       });
   },
 });

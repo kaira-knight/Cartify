@@ -2,40 +2,36 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useGoogleLogin } from "@react-oauth/google";
-import { useDispatch, useSelector } from "react-redux";       // ✅ NEW
-import { register, googleLogin, clearError, clearMessage } from "../redux/userSlice"; // ✅ NEW
+import { useDispatch, useSelector } from "react-redux";
+import { register, googleLogin, clearError, clearMessage } from "../redux/userSlice";
 import "./Signup.css";
 
 function Signup() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();                               // ✅ NEW
+  const dispatch = useDispatch();
 
-  // ✅ NEW — Read state from Redux instead of local
   const { loading, error, message, isAuthenticated } = useSelector(
     (state) => state.user
   );
 
   const [formData, setFormData] = useState({
     name: "",
-    email: "",
+    emailOrPhone: "",    // ✅ Single field
     password: "",
     confirmPassword: "",
   });
 
-  // ✅ NEW — Handle Redux state changes
   useEffect(() => {
     if (error) {
       toast.error(error);
       dispatch(clearError());
     }
     if (message && !isAuthenticated) {
-      // Registration success — redirect to login
       toast.success(message);
       dispatch(clearMessage());
       setTimeout(() => navigate("/login"), 2000);
     }
     if (isAuthenticated) {
-      // Google signup success — redirect to home
       toast.success(message || "Signup successful");
       dispatch(clearMessage());
       navigate("/");
@@ -52,9 +48,9 @@ function Signup() {
 
   // ========== NORMAL SIGNUP ==========
   const handleSignup = () => {
-    const { name, email, password, confirmPassword } = formData;
+    const { name, emailOrPhone, password, confirmPassword } = formData;
 
-    if (!name || !email || !password || !confirmPassword) {
+    if (!name || !emailOrPhone || !password || !confirmPassword) {
       toast.error("Please fill all fields");
       return;
     }
@@ -71,14 +67,13 @@ function Signup() {
       return;
     }
 
-    // ✅ CHANGED — Was localStorage, now Redux
-    dispatch(register({ name, email, password }));
+    // ✅ Send emailOrPhone — slice will detect type
+    dispatch(register({ name, emailOrPhone, password }));
   };
 
   // ========== GOOGLE SIGNUP ==========
   const handleGoogleSignup = useGoogleLogin({
     onSuccess: (tokenResponse) => {
-      // ✅ CHANGED — Was googleAuth(), now Redux
       dispatch(googleLogin(tokenResponse.access_token));
     },
     onError: () => toast.error("Google signup failed"),
@@ -86,7 +81,6 @@ function Signup() {
 
   return (
     <div className="signup-container">
-      {/* LEFT IMAGE */}
       <div className="left">
         <img
           src="https://images.unsplash.com/photo-1607082349566-187342175e2f"
@@ -94,7 +88,6 @@ function Signup() {
         />
       </div>
 
-      {/* RIGHT FORM */}
       <div className="right">
         <div className="form-box">
           <h2>Create an account</h2>
@@ -108,11 +101,12 @@ function Signup() {
             onChange={handleChange}
           />
 
+          {/* ✅ Single field for email OR phone */}
           <input
             type="text"
-            name="email"
+            name="emailOrPhone"
             placeholder="Email or Phone Number"
-            value={formData.email}
+            value={formData.emailOrPhone}
             onChange={handleChange}
           />
 
@@ -140,7 +134,6 @@ function Signup() {
             <br />• 1 special character
           </p>
 
-          {/* ✅ CHANGED — Added loading state */}
           <button
             className="signup-btn"
             onClick={handleSignup}
@@ -163,9 +156,7 @@ function Signup() {
 
           <p className="login-text">
             Already have account?
-            <Link to="/login" className="active-link">
-              {" "}Log in
-            </Link>
+            <Link to="/login" className="active-link"> Log in</Link>
           </p>
         </div>
       </div>

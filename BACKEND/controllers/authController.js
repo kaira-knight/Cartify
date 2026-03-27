@@ -11,61 +11,62 @@ import client from "../config/googleClient.js";
 //Register ->> Sign Up
 export const register = async (req, res) => {
   try {
-    const { name, email, phone, password ,role} = req.body;
+    const { name, email, phone, password, role } = req.body;
 
     // Validation
     if (!name || (!email && !phone) || !password) {
-      return res.json({
+      return res.status(400).json({
         success: false,
         message: "Name, Email or Phone, and Password are required",
       });
     }
 
-    // Check existing user
-    const existingUser = await User.findOne({
-      $or: [{ email }, { phone }],
-    });
+    // ✅ Check existing user — only check the field that was provided
+    let existingUser = null;
 
-    if (existingUser) {
-      // Provide specific feedback on WHICH field is taken
-      if (existingUser.email === email) {
-        return res.status(409).json({ message: "Email already registered" });
+    if (email) {
+      existingUser = await User.findOne({ email });
+      if (existingUser) {
+        return res.status(409).json({
+          success: false,
+          message: "Email already registered",
+        });
       }
-      if (existingUser.phone === phone) {
-        return res.status(409).json({ message: "Phone already registered" });
+    }
+
+    if (phone) {
+      existingUser = await User.findOne({ phone });
+      if (existingUser) {
+        return res.status(409).json({
+          success: false,
+          message: "Phone number already registered",
+        });
       }
     }
 
     // Hash Password
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // ✅ Create user with only provided fields
     const user = await User.create({
       name,
-      email,
-      phone,
+      email: email || undefined,
+      phone: phone || undefined,
       password: hashedPassword,
-      role
+      role: role || "Customer",
     });
 
-    // Generate Token
-    const token = jwt.sign(
-      { id: user._id },
-      process.env.JWT_SECRET,
-      { expiresIn: "7d" }
-    );
-
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite:
-        process.env.NODE_ENV === "production" ? "none" : "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+    return res.status(201).json({
+      success: true,
+      message: "Registered Successfully",
     });
-
-    return res.json({ success: true, message: "Registered Successfully" });
 
   } catch (error) {
-    return res.json({ success: false, message: error.message });
+    console.error("Register Error:", error.message);
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
   }
 };
 
@@ -76,7 +77,7 @@ export const login = async (req, res) => {
     const { identifier, password } = req.body;
 
     if (!identifier || !password) {
-      return res.json({
+      return res.status(400).json({
         success: false,
         message: "Email/Phone and Password required",
       });
@@ -88,16 +89,24 @@ export const login = async (req, res) => {
     });
 
     if (!user) {
-      return res.json({
+      return res.status(404).json({
         success: false,
         message: "User not found",
+      });
+    }
+
+    // Check if Google-only user
+    if (!user.password) {
+      return res.status(400).json({
+        success: false,
+        message: "Please login with Google",
       });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-      return res.json({
+      return res.status(401).json({
         success: false,
         message: "Invalid password",
       });
@@ -109,18 +118,33 @@ export const login = async (req, res) => {
       { expiresIn: "7d" }
     );
 
+    // Optional: Set cookie (for httpOnly cookie auth)
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite:
-        process.env.NODE_ENV === "production" ? "none" : "strict",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    return res.json({ success: true, message: "Login Successful" });
+    // ✅ SEND TOKEN AND USER IN RESPONSE
+    return res.status(200).json({
+      success: true,
+      message: "Login Successful",
+      token,                           // ✅ ADD THIS
+      user: {                          // ✅ ADD THIS
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        role: user.role,
+      },
+    });
 
   } catch (error) {
-    return res.json({ success: false, message: `Login Error ${error.message}` });
+    return res.status(500).json({
+      success: false,
+      message: `Login Error: ${error.message}`,
+    });
   }
 };
 
@@ -351,51 +375,48 @@ export const resetPassword=async(req,res)=>{
 }
 export const googleLogin = async (req, res) => {
   try {
-    const { name, email, picture, googleId } = req.body;
+    const { name, email, googleId } = req.body;
 
     if (!email) {
-      return res.status(400).json({
-        success: false,
-        message: "Email is required",
-      });
+      return res.status(400).json({ success: false, message: "Email required" });
     }
 
     let user = await User.findOne({ email });
 
     if (!user) {
+      const randomPassword = Math.random().toString(36) + Date.now().toString(36);
+      const hashedPassword = await bcrypt.hash(randomPassword, 10);
+
       user = await User.create({
         name,
         email,
-        password: null,
-        isVerified: true,
+        password: hashedPassword,
+        isOtpVerified: true,
       });
     }
 
-    const tokenJWT = jwt.sign(
+    // ✅ Create token
+    const token = jwt.sign(
       { id: user._id },
       process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
 
-    res.cookie("token", tokenJWT, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite:
-        process.env.NODE_ENV === "production" ? "none" : "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
-
-    return res.status(200).json({
+    // ✅ MUST send token in response
+    res.status(200).json({
       success: true,
       message: "Google login successful",
-      user,
+      token,    // ← THIS IS REQUIRED
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
     });
 
   } catch (error) {
-    console.error("Google Login Error:", error);
-    return res.status(401).json({
-      success: false,
-      message: "Google authentication failed",
-    });
+    console.error("Google Login Error:", error.message);
+    res.status(500).json({ success: false, message: "Google auth failed" });
   }
 };
