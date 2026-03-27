@@ -1,0 +1,164 @@
+/* ================= FLASH SALES SECTION ================= */
+
+.flash-section {
+  width: 100%;
+  padding: 40px 60px;
+  background: #ffffff;
+  box-sizing: border-box;
+  position: relative;
+}
+
+/* ================= HEADER ================= */
+
+.flash-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  gap: 60px;
+}
+
+.today {
+  color: #db4444;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.flash-header h2 {
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* ================= TIMER ================= */
+
+.timer {
+  display: flex;
+  text-shadow: #555;
+  align-items: center;
+  gap: 20px;
+}
+
+.timer div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.timer span {
+  font-size: 22px;
+  font-weight: 700;
+  color: #000;
+}
+
+.timer p {
+  font-size: 12px;
+  color: #555;
+  margin: 0;
+}
+
+/* ================= SLIDER ================= */
+
+.slick-slider {
+  width: 100%;
+}
+
+.slick-list {
+  overflow: hidden; /* Hide horizontal scroll */
+}
+
+.slick-track {
+  display: flex;
+}
+
+/* Space between cards */
+
+.slick-slide > div {
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+/* ================= ARROWS ================= */
+
+.arrow {
+  position: absolute;
+  top: -60px;
+
+  width: 42px;
+  height: 42px;
+
+  background: #f5f5f5;
+  border-radius: 50%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  cursor: pointer;
+  z-index: 10;
+
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.arrow:hover {
+  background: #db4444;
+  color: #ffffff;
+  transform: scale(1.1);
+}
+
+.next {
+  right: 10px;
+}
+
+.prev {
+  right: 65px;
+}
+
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 1024px) {
+  .flash-section {
+    padding: 30px 40px;
+  }
+
+  .flash-header h2 {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 768px) {
+  .flash-section {
+    padding: 25px 20px;
+  }
+
+  .timer {
+    gap: 15px;
+  }
+
+  .timer span {
+    font-size: 18px;
+  }
+
+  .arrow {
+    top: -50px;
+  }
+}
+
+@media (max-width: 480px) {
+  .flash-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .flash-header h2 {
+    font-size: 22px;
+  }
+
+  .timer {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
