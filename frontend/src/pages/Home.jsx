@@ -1,10 +1,10 @@
-import React from "react";
+import HeroSection from "../components/HeroSection";
+
 
 function Home() {
   return (
-    <div style={{ padding: "50px", textAlign: "center" }}>
-      <h1>Welcome to Exclusive Store</h1>
-      <p>Home Page</p>
+    <div>
+    <HeroSection/>
     </div>
   );
 }

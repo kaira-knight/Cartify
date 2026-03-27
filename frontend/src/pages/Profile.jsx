@@ -1,21 +1,21 @@
 import Navbar from "../components/Navbar";
 
-const Orders = ({ user }) => {
+const Profile = ({ user }) => {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar user={user} />
 
-      <div className="p-6">
+      <div className="p-6 space-y-2">
         <h2 className="text-2xl font-bold">
-          Order History
+          User Profile
         </h2>
 
-        <p className="mt-4">
-          Status: Placed → Shipped → Delivered
-        </p>
+        <p>Name: User</p>
+        <p>Email: user@email.com</p>
+        <p>Saved Addresses</p>
       </div>
     </div>
   );
 };
 
-export default Orders;
+export default Profile;
