@@ -11,7 +11,10 @@ const HeroSection = () => {
     dots: true,
     infinite: true,
     autoplay: true,
+    autoplaySpeed: 2500,
     speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
     arrows: false
   };
 
@@ -36,15 +39,14 @@ const HeroSection = () => {
 
       {/* RIGHT CAROUSEL */}
 
-      <div className="carousel">
+      <div className="carousel-wrapper">
 
         <Slider {...settings}>
 
-          <div className="slide">
-            <div className="slide-content">
+          <div>
+            <div className="slide">
 
               <div className="text">
-
                 <h4>iPhone 14 Series</h4>
 
                 <h1>
@@ -55,22 +57,20 @@ const HeroSection = () => {
                 <button>
                   Shop Now →
                 </button>
-
               </div>
 
               <img
-                src="https://i.imgur.com/fHyEMsl.jpg"
+                src="https://sell.gameloot.in/wp-content/uploads/sites/4/2022/09/apple-14-pro-1tb.jpg"
                 alt="iphone"
               />
 
             </div>
           </div>
 
-          <div className="slide">
-            <div className="slide-content">
+          <div>
+            <div className="slide">
 
               <div className="text">
-
                 <h4>Samsung Galaxy</h4>
 
                 <h1>
@@ -81,11 +81,10 @@ const HeroSection = () => {
                 <button>
                   Shop Now →
                 </button>
-
               </div>
 
               <img
-                src="https://i.imgur.com/3ZQ3Z6H.png"
+                src="https://images.unsplash.com/photo-1598327105666-5b89351aff97"
                 alt="phone"
               />
 
