@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
+import { useGoogleLogin } from "@react-oauth/google";
 import { useDispatch, useSelector } from "react-redux";
-import { login, clearError, clearMessage } from "../redux/userSlice";
+import { register, googleLogin, clearError, clearMessage } from "../redux/userSlice";
 import "./Login.css";
 
 const LoginPage = () => {
@@ -51,6 +52,14 @@ const LoginPage = () => {
     }));
   };
 
+    // ========== GOOGLE SIGNUP ==========
+    const handleGoogleSignup = useGoogleLogin({
+      onSuccess: (tokenResponse) => {
+        dispatch(googleLogin(tokenResponse.access_token));
+      },
+      onError: () => toast.error("Google signup failed"),
+    });
+
   return (
     <div className="login-container">
       <div className="login-left">
@@ -90,19 +99,34 @@ const LoginPage = () => {
               />
             </div>
 
-            <div className="form-actions">
-              <button
+                        <button
                 type="submit"
                 className="login-btn"
                 disabled={loading}
               >
                 {loading ? "Logging in..." : "Log In"}
               </button>
-
-              <Link to="/forgot-password" className="forgot-link">
-                Forget Password?
-              </Link>
+                                    <button
+            className="google-btn"
+            onClick={handleGoogleSignup}
+            disabled={loading}
+          >
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/281/281764.png"
+              alt="google"
+            />
+            Sign in with Google
+          </button>
+            <div className="form-actions">
+                        <p className="login-text">
+            Don't have an account?
+            <Link to="/signup" className="active-link"> Sign up</Link>
+          </p>
+                                  <p className="login-text">
+            <Link to="/forgot-password" className="active-link">Forget Password?</Link>
+          </p>
             </div>
+
           </form>
         </div>
       </div>
