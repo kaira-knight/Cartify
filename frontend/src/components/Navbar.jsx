@@ -147,7 +147,7 @@ const Navbar = ({ user }) => {
       {/* Main Navbar */}
       <nav className="main-nav">
         <div className="nav-content">
-          <h1 className="nav-logo">Exclusive</h1>
+          <div className="nav-logo">Exclusive</div>
 
           {/* Mobile Menu Icon */}
           <div className="mobile-menu-icon" onClick={toggleMobileMenu}>
