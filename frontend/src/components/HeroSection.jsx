@@ -60,7 +60,7 @@ const HeroSection = () => {
               </div>
 
               <img
-                src="https://sell.gameloot.in/wp-content/uploads/sites/4/2022/09/apple-14-pro-1tb.jpg"
+                src="iphone.png"
                 alt="iphone"
               />
 
@@ -84,7 +84,7 @@ const HeroSection = () => {
               </div>
 
               <img
-                src="https://images.unsplash.com/photo-1598327105666-5b89351aff97"
+                src="apple.png"
                 alt="phone"
               />
 

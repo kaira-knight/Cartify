@@ -1,5 +1,6 @@
 import React from "react";
-import { FaHeart, FaEye } from "react-icons/fa";
+import { CiHeart } from "react-icons/ci";
+import { IoEyeOutline } from "react-icons/io5";
 import "./ProductCard.css"
 const ProductCard = ({ product }) => {
   return (
@@ -15,9 +16,9 @@ const ProductCard = ({ product }) => {
 
       <div className="icons">
 
-        <FaHeart className="icon" />
+        <CiHeart className="icon" />
 
-        <FaEye className="icon" />
+        <IoEyeOutline className="icon" />
 
       </div>
 

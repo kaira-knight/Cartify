@@ -20,10 +20,10 @@
 
 .discount {
   position: absolute;
-  top: 18px;
-  left: 18px;
+  top: 23px;
+  left: 24px;
   height: 24px;
-  width: 46px;
+  width: 49px;
   background: #db4444;
   color: #fff;
   padding: 4px 8px;
@@ -37,8 +37,8 @@
 
 .icons {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: 20px;
+  right: 18px;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -156,6 +156,64 @@
 .rating span {
   color: #555;
   font-size: 13px;
+}
+/* ================= VIEW ALL BUTTON ================= */
+
+.view-all {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 40px;
+  width: 100%;
+}
+
+/* Button Style */
+
+.view-btn {
+  background-color: #db4444;
+  color: #ffffff;
+
+  padding: 14px 38px;
+
+  font-size: 16px;
+  font-weight: 600;
+
+  border: none;
+  border-radius: 6px;
+
+  cursor: pointer;
+
+  transition: all 0.3s ease;
+}
+
+/* Hover Effect */
+
+.view-btn:hover {
+  background-color: #b93636;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Click Effect */
+
+.view-btn:active {
+  transform: scale(0.96);
+}
+
+/* Responsive */
+
+@media (max-width: 768px) {
+  .view-btn {
+    padding: 12px 28px;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .view-btn {
+    width: 100%;
+    max-width: 280px;
+  }
 }
 
 /* ================= RESPONSIVE ================= */

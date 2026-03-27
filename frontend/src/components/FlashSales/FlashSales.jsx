@@ -7,6 +7,7 @@ import ProductsData from "./Products.json"
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import BrowseCategory from "./BrowseCategory";
 
 const FlashSales = () => {
 
@@ -225,6 +226,12 @@ const FlashSales = () => {
         ))}
 
       </Slider>
+
+
+      <div className="view-all">
+        <button className="view-btn">View All Products</button>
+      </div>
+      <BrowseCategory/>
 
     </div>
   );
