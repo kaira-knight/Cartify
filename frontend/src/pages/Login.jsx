@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import { useGoogleLogin } from "@react-oauth/google";
 import { useDispatch, useSelector } from "react-redux";
-import { register, googleLogin, clearError, clearMessage } from "../redux/userSlice";
+import { login, googleLogin, clearError, clearMessage } from "../redux/userSlice";
 import "./Login.css";
 
 const LoginPage = () => {
@@ -99,14 +99,14 @@ const LoginPage = () => {
               />
             </div>
 
-                        <button
+               <button
                 type="submit"
                 className="login-btn"
                 disabled={loading}
               >
                 {loading ? "Logging in..." : "Log In"}
               </button>
-                                    <button
+            <button
             className="google-btn"
             onClick={handleGoogleSignup}
             disabled={loading}
