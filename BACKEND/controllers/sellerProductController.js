@@ -7,6 +7,8 @@ import { uploadImage,deleteImage,deleteMultipleImages } from "../utils/cloudinar
 //Craete Product Controller
 //POST/api/seller/products
 export const createProduct = asyncHandler(async (req, res) => {
+
+   
   const {
     name,
     description,
@@ -116,6 +118,7 @@ export const getSellerProducts = asyncHandler(async (req, res) => {
     category,
     isActive,
   } = req.query;
+
 
   // ── Build filter ──
   const filter = { seller: req.user._id };
@@ -406,7 +409,7 @@ export const updateStock = asyncHandler(async (req, res) => {
       throw new ApiError(404, "Variant not found");
     }
 
-    if (variantStock === undefined || variantStock < 0) {
+    if (variantStock === undefined || variantStock < 0){
       throw new ApiError(400, "Valid variant stock value is required");
     }
 

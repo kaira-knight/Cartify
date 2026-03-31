@@ -116,7 +116,7 @@ const productSchema = new mongoose.Schema(
 
   image: {
   url:       { type: String, required: [true, "Product image URL is required"] },
-  public_id: { type: String, required: [true, "Product image public_id is required"] },
+  public_id: { type: String},
 },
 
     // ✅ Colors available

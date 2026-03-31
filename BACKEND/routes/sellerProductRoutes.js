@@ -16,7 +16,7 @@ import { upload } from "../middleware/uploadMiddleware.js";
 const router = express.Router();
 
 // ── All routes require authentication + seller role ──
-router.use(protect, authorizeRoles("seller", "admin"));
+router.use(protect, authorizeRoles("Seller", "Admin"));
 
 // ── Multer fields config ──
 const productUpload = upload.fields([
@@ -28,6 +28,7 @@ const productUpload = upload.fields([
 router.get("/stats", getSellerStats);
 
 // ── CRUD ──
+
 router.route("/")
   .get(getSellerProducts)
   .post(productUpload, createProduct);

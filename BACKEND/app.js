@@ -8,10 +8,11 @@ import fs from "fs";
 import { notFound, globalErrorHandler } from "./middleware/errorMiddleware.js";
 import { handleMulterError } from "./middleware/uploadMiddleware.js";
 
+
 // ── Routes ──
 import sellerProductRoutes from "./routes/sellerProductRoutes.js";
 import customerProductRoutes from "./routes/customerProductRoutes.js";
-
+import authRoutes from "./routes/authRoutes.js"
 dotenv.config();
 
 const app = express();
@@ -41,7 +42,7 @@ app.get("/api/health", (req, res) => {
 
 app.use("/api/seller/products", sellerProductRoutes);
 app.use("/api/products", customerProductRoutes);
-
+app.use("/api/auth",authRoutes);
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // ERROR HANDLING (order matters!)
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
