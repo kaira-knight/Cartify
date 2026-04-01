@@ -26,6 +26,8 @@ import Settings from "./seller/pages/settings/Settings";
 
 // Utils
 import ProtectedRoute from "./utils/ProtectedRoute";
+import Contact from "./customer/pages/Contact";
+import About from "./customer/pages/About";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -41,6 +43,8 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/about" element={<About />} />
 
           <Route
             path="/checkout"

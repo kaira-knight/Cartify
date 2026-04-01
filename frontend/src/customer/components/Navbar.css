@@ -193,7 +193,9 @@
   .mobile-menu-icon {
     display: block;
   }
-
+.nav-actions {
+display: none;
+}
   .nav-links {
     display: none;
   }
