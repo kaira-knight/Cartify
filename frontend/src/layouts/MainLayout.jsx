@@ -2,15 +2,16 @@ import { Outlet } from "react-router-dom";
 import Navbar from "../customer/components/Navbar";
 import Footer from "../customer/components/Footer";
 
-const MainLayout = () => {
+const MainLayout = ({ user }) => {
   return (
     <div style={styles.container}>
-
+      <Navbar user={user} />
 
       <main style={styles.main}>
         <Outlet />
       </main>
 
+      <Footer />
     </div>
   );
 };

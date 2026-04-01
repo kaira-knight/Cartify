@@ -35,8 +35,6 @@ function App() {
   return (
     <Router>
 
-      {/* Global Navbar */}
-      <Navbar user={user} />
 
       <Routes>
 
@@ -152,8 +150,6 @@ function App() {
 
       </Routes>
 
-      {/* Global Footer */}
-      <Footer />
 
       {/* Toast Notifications */}
       <ToastContainer />
