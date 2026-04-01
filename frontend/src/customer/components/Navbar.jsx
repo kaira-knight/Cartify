@@ -1,51 +1,139 @@
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { NavLink } from "react-router-dom";
+import {
+  Search,
+  ChevronDown,
+  User,
+  Heart,
+  ShoppingCart,
+  Briefcase,
+  XCircle,
+  Star,
+  LogOut,
+  Menu,
+} from "lucide-react";
 
-const Navbar = () => {
-  const user = localStorage.getItem("userInfo");
+import "./Navbar.css";
+
+const Navbar = ({ user }) => {
+  const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const toggleAccountMenu = () => {
+    setIsAccountMenuOpen(!isAccountMenuOpen);
+  };
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
 
   return (
-    <nav style={styles.nav}>
-      <h2>Cartify 🛒</h2>
+    <header className="header-container">
+      {/* Top Bar */}
+      <div className="top-bar">
+        <div className="top-bar-content">
+          <p>
+            Summer Sale For All Swim Suits And Free Express Delivery - OFF 50%!
+            <a href="/shop" className="shop-now-link">
+              ShopNow
+            </a>
+          </p>
 
-      <div style={styles.links}>
-        <Link to="/">Home</Link>
-        <Link to="/cart">Cart</Link>
-
-        {user ? (
-          <>
-            <Link to="/orders">Orders</Link>
-            <button
-              onClick={() => {
-                localStorage.removeItem("userInfo");
-                window.location.reload();
-              }}
-            >
-              Logout
-            </button>
-          </>
-        ) : (
-          <>
-            <Link to="/login">Login</Link>
-            <Link to="/signup">Signup</Link>
-          </>
-        )}
+          <div className="language-selector">
+            <span>English</span>
+            <ChevronDown size={14} />
+          </div>
+        </div>
       </div>
-    </nav>
-  );
-};
 
-const styles = {
-  nav: {
-    display: "flex",
-    justifyContent: "space-between",
-    padding: "1rem 2rem",
-    background: "#111",
-    color: "white",
-  },
-  links: {
-    display: "flex",
-    gap: "1rem",
-  },
+      {/* Main Navbar */}
+      <nav className="main-nav">
+        <div className="nav-content">
+          <div className="nav-logo">Exclusive</div>
+
+          {/* Mobile Menu Icon */}
+          <div className="mobile-menu-icon" onClick={toggleMobileMenu}>
+            <Menu size={28} />
+          </div>
+
+          {/* Navigation Links */}
+          <ul
+            className={`nav-links ${
+              isMobileMenuOpen ? "nav-links-mobile" : ""
+            }`}> 
+           <li> <NavLink to="/" end className={({ isActive }) => isActive ? "border-b-2 border-red-500 pb-1" : "" } > Home </NavLink> </li> 
+           <li> <NavLink to="/contact" className={({ isActive }) => isActive ? "border-b-2 border-red-500 pb-1" : "" } > Contact </NavLink> </li>
+            <li> <NavLink to="/about" className={({ isActive }) => isActive ? "border-b-2 border-red-500 pb-1" : "" } > About </NavLink> </li> 
+            <li> <NavLink to="/signup" className={({ isActive }) => isActive ? "border-b-2 border-red-500 pb-1" : "" } > Sign Up </NavLink> </li> 
+           </ul>
+          
+
+          {/* Actions */}
+          <div className="nav-actions">
+            {/* Search */}
+            <div className="search-wrapper">
+              <input
+                type="text"
+                placeholder="What are you looking for?"
+                className="search-input"
+              />
+              <Search size={18} />
+            </div>
+
+            {/* User Icons */}
+            {user && (
+              <div className="user-icons">
+                <a href="/wishlist">
+                  <Heart size={22} />
+                </a>
+
+                <a href="/cart" className="cart-icon">
+                  <ShoppingCart size={22} />
+                  <span className="cart-count">2</span>
+                </a>
+
+                <div
+                  className="account-container"
+                  onClick={toggleAccountMenu}
+                >
+                  <User size={22} />
+
+                  {isAccountMenuOpen && (
+                    <div className="account-menu">
+                      <a href="/account" className="account-item">
+                        <User size={16} />
+                        Manage My Account
+                      </a>
+
+                      <a href="/orders" className="account-item">
+                        <Briefcase size={16} />
+                        My Order
+                      </a>
+
+                      <a href="/cancellations" className="account-item">
+                        <XCircle size={16} />
+                        My Cancellations
+                      </a>
+
+                      <a href="/reviews" className="account-item">
+                        <Star size={16} />
+                        My Reviews
+                      </a>
+
+                      <a href="/logout" className="account-item">
+                        <LogOut size={16} />
+                        Logout
+                      </a>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </nav>
+    </header>
+  );
 };
 
 export default Navbar;

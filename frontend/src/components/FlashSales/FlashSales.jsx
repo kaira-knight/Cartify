@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
-import ProductCard from "./ProductCard";
+import ProductCard from "./ProductCard.jsx";
 import "./FlashSales.css";
 import ProductsData from "./Products.json"
 

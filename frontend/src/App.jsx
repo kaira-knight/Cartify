@@ -1,71 +1,97 @@
-<<<<<<< HEAD
 import React, { useState } from "react";
+import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route
-} from "react-router-dom";
 
-import { GoogleOAuthProvider } from "@react-oauth/google";
+// Layouts
+import MainLayout from "./layouts/MainLayout";
+import SellerLayout from "./seller/layouts/SellerLayout";
 
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
+// Components
+import Navbar from "./customer/components/Navbar";
+import Footer from "./customer/components/Footer";
+import ProtectedRoute from "./utils/ProtectedRoute";
 
+// Customer Pages
 import Home from "./pages/Home";
-import Signup from "./pages/Signup";
-import About from "./pages/About";
-import Contact from "./pages/Contact";
-import Login from "./pages/Login";
+import Login from "./customer/pages/Login";
+import Signup from "./customer/pages/Signup";
+import ProductDetails from "./customer/pages/ProductDetails";
+import Cart from "./customer/pages/Cart";
+import Checkout from "./customer/pages/Checkout";
+import Orders from "./customer/pages/Orders";
 
-// ⭐ NEW IMPORTS
-
+// Dashboard Pages
 import CustomerDashboard from "./pages/CustomerDashboard";
-import SellerDashboard from "./pages/SellerDashboard";
-import BuyerDashboard from "./pages/BuyerDashboard";
+import SellerDashboard from "./pages/SellerDashboard.jsx";
+import BuyerDashboard from "./pages/BuyerDashboard.jsx";
 
-import ProtectedRoute from "./components/ProtectedRoute";
+// Seller Pages
+import Dashboard from "./seller/pages/Dashboard";
+import ProductList from "./seller/pages/products/ProductList";
 
 function App() {
-
   const [user, setUser] = useState(null);
-
 
   return (
     <Router>
 
+      {/* Global Navbar */}
       <Navbar user={user} />
 
       <Routes>
 
-        <Route
-          path="/"
-          element={<Home />}
-        />
+        {/* ================= CUSTOMER ROUTES ================= */}
 
-        <Route
-          path="/about"
-          element={<About />}
-        />
+        <Route element={<MainLayout />}>
 
-        <Route
-          path="/contact"
-          element={<Contact />}
-        />
+          <Route
+            path="/"
+            element={<Home />}
+          />
 
-        <Route
-          path="/signup"
-          element={<Signup />}
-        />
+          <Route
+            path="/login"
+            element={
+              <Login setUser={setUser} />
+            }
+          />
 
-        <Route
-          path="/login"
-          element={
-            <Login setUser={setUser} />
-          }
-        />
+          <Route
+            path="/signup"
+            element={<Signup />}
+          />
 
-        {/* ⭐ NEW PROTECTED ROUTES */}
+          <Route
+            path="/product/:id"
+            element={<ProductDetails />}
+          />
+
+          <Route
+            path="/cart"
+            element={<Cart />}
+          />
+
+          <Route
+            path="/checkout"
+            element={
+              <ProtectedRoute user={user}>
+                <Checkout />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/orders"
+            element={
+              <ProtectedRoute user={user}>
+                <Orders />
+              </ProtectedRoute>
+            }
+          />
+
+        </Route>
+
+        {/* ================= ROLE DASHBOARDS ================= */}
 
         <Route
           path="/customer-dashboard"
@@ -75,53 +101,11 @@ function App() {
               role="customer"
             >
               <CustomerDashboard />
-=======
-import { Routes, Route } from "react-router-dom";
-
-// Layouts
-import MainLayout from "./layouts/MainLayout";
-import SellerLayout from "./seller/layouts/SellerLayout";
-
-// Customer Pages
-import Home from "./customer/pages/Home";
-import Login from "./customer/pages/Login";
-import Signup from "./customer/pages/Signup";
-import ProductDetails from "./customer/pages/ProductDetails";
-import Cart from "./customer/pages/Cart";
-import Checkout from "./customer/pages/Checkout";
-import Orders from "./customer/pages/Orders";
-
-// Seller Pages
-import Dashboard from "./seller/pages/Dashboard";
-import ProductList from "./seller/pages/products/ProductList";
-
-// Utils
-import ProtectedRoute from "./utils/ProtectedRoute"; // ✅ FIXED CASE
-
-function App() {
-  return (
-    <Routes>
-
-      {/* ================= CUSTOMER ROUTES ================= */}
-      <Route element={<MainLayout />}>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/product/:id" element={<ProductDetails />} />
-        <Route path="/cart" element={<Cart />} />
-
-        <Route
-          path="/checkout"
-          element={
-            <ProtectedRoute>
-              <Checkout />
->>>>>>> dev
             </ProtectedRoute>
           }
         />
 
         <Route
-<<<<<<< HEAD
           path="/seller-dashboard"
           element={
             <ProtectedRoute
@@ -145,38 +129,36 @@ function App() {
           }
         />
 
-      </Routes>
+        {/* ================= SELLER PANEL ================= */}
 
-      <Footer />
-
-<ToastContainer />
-
-    </Router>
-=======
-          path="/orders"
+        <Route
+          path="/seller"
           element={
-            <ProtectedRoute>
-              <Orders />
+            <ProtectedRoute user={user}>
+              <SellerLayout />
             </ProtectedRoute>
           }
-        />
-      </Route>
+        >
+          <Route
+            index
+            element={<Dashboard />}
+          />
 
-      {/* ================= SELLER ROUTES ================= */}
-      <Route
-        path="/seller"
-        element={
-          <ProtectedRoute>
-            <SellerLayout />
-          </ProtectedRoute>
-        }
-      >
-        <Route index element={<Dashboard />} />
-        <Route path="products" element={<ProductList />} />
-      </Route>
+          <Route
+            path="products"
+            element={<ProductList />}
+          />
+        </Route>
 
-    </Routes>
->>>>>>> dev
+      </Routes>
+
+      {/* Global Footer */}
+      <Footer />
+
+      {/* Toast Notifications */}
+      <ToastContainer />
+
+    </Router>
   );
 }
 
