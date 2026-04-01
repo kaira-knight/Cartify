@@ -1,0 +1,126 @@
+.parent{
+
+    padding: 60px 80px;
+}
+.banner {
+  width: 100%;
+  min-height: 350px;
+  display: flex;
+  padding-top: 10px;
+  justify-content: space-between;
+   padding-left: 40px;
+ background: linear-gradient(
+    to right,
+    #000000,
+    #111111);
+  color: white;
+}
+
+/* LEFT */
+
+.banner-left {
+  max-width: 500px;
+}
+
+.category {
+  color: #00ff66;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.title {
+  font-size: 48px;
+  font-weight: bold;
+  line-height: 1.2;
+  margin-bottom: 25px;
+}
+
+/* TIMER */
+
+.timer {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.circle {
+  width: 70px;
+  height: 70px;
+
+  background: white;
+  color: black;
+
+  border-radius: 50%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  font-weight: bold;
+}
+
+.circle span {
+  font-size: 18px;
+}
+
+.circle p {
+  font-size: 12px;
+  margin: 0;
+}
+
+/* BUTTON */
+
+.buy-btn {
+  background: #00ff66;
+  color: black;
+
+  padding: 12px 28px;
+
+  border: none;
+  border-radius: 6px;
+
+  font-weight: 600;
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+.buy-btn:hover {
+  background: #00cc55;
+}
+
+/* RIGHT */
+.banner-right{
+  padding-right: 60px;
+}
+.banner-right img {
+  width: 420px;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+
+  .banner {
+    flex-direction: column;
+    text-align: center;
+    padding: 40px 20px;
+  }
+
+  .title {
+    font-size: 32px;
+  }
+
+  .timer {
+    justify-content: center;
+  }
+
+  .banner-right img {
+    margin-top: 30px;
+    width: 280px;
+  }
+
+}
