@@ -109,7 +109,7 @@ cartSchema.pre("save", function () {
   if (this.finalPrice < 0) this.finalPrice = 0;
 });
 
-cartSchema.index({ user: 1 });
+
 
 const Cart = mongoose.model("Cart", cartSchema);
 export default Cart;
