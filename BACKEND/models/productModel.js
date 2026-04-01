@@ -26,6 +26,8 @@ const reviewSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+
+
 // ✅ Variant Schema (for size/color combinations)
 const variantSchema = new mongoose.Schema({
   color: {
@@ -48,6 +50,9 @@ const variantSchema = new mongoose.Schema({
     type: String,  // Stock Keeping Unit
   },
 });
+
+
+
 
 // ✅ Main Product Schema
 const productSchema = new mongoose.Schema(
@@ -109,19 +114,10 @@ const productSchema = new mongoose.Schema(
       trim: true,
     },
 
-    // ✅ Main image (thumbnail)
-    image: {
-      type: String,
-      required: [true, "Product image is required"],
-    },
-
-    // ✅ Multiple images for gallery
-    images: [
-      {
-        url: String,
-        public_id: String,
-      },
-    ],
+  image: {
+  url:       { type: String, required: [true, "Product image URL is required"] },
+  public_id: { type: String},
+},
 
     // ✅ Colors available
     colors: [
@@ -189,14 +185,19 @@ const productSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// ✅ Auto-calculate discount before saving
-productSchema.pre("save", function (next) {
-  if (this.oldPrice && this.oldPrice > this.price) {
-    this.discount = Math.round(((this.oldPrice - this.price) / this.oldPrice) * 100);
+// ✅ Fix — add a pre-hook for updates as well
+productSchema.pre("findOneAndUpdate", function (next) {
+  const update = this.getUpdate();
+  const price    = update.price    ?? update.$set?.price;
+  const oldPrice = update.oldPrice ?? update.$set?.oldPrice;
+
+  if (oldPrice && price && oldPrice > price) {
+    this.set({
+      discount: Math.round(((oldPrice - price) / oldPrice) * 100),
+    });
   }
   next();
 });
-
 // ✅ Indexes for faster queries
 productSchema.index({ name: "text", description: "text", tags: "text" });
 productSchema.index({ category: 1 });
