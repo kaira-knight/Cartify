@@ -1,13 +1,10 @@
 import { Navigate } from "react-router-dom";
 
-// Temporary fake auth check
-// Later we'll connect this to Redux
-const isAuthenticated = () => {
-  return localStorage.getItem("userInfo");
-};
-
 const ProtectedRoute = ({ children }) => {
-  if (!isAuthenticated()) {
+  // Replace this later with real auth logic (JWT, context, etc.)
+  const isAuthenticated = localStorage.getItem("token");
+
+  if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
 
