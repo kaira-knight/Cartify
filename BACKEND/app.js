@@ -13,6 +13,7 @@ import { handleMulterError } from "./middleware/uploadMiddleware.js";
 import sellerProductRoutes from "./routes/sellerProductRoutes.js";
 import customerProductRoutes from "./routes/customerProductRoutes.js";
 import authRoutes from "./routes/authRoutes.js"
+import cartRoutes from "./routes/cartRoutes.js"
 dotenv.config();
 
 const app = express();
@@ -43,6 +44,7 @@ app.get("/api/health", (req, res) => {
 app.use("/api/seller/products", sellerProductRoutes);
 app.use("/api/products", customerProductRoutes);
 app.use("/api/auth",authRoutes);
+app.use("/api/cart", cartRoutes);
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // ERROR HANDLING (order matters!)
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
