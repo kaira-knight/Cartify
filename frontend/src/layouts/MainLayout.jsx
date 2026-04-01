@@ -5,13 +5,12 @@ import Footer from "../customer/components/Footer";
 const MainLayout = () => {
   return (
     <div style={styles.container}>
-      <Navbar />
+
 
       <main style={styles.main}>
         <Outlet />
       </main>
 
-      <Footer />
     </div>
   );
 };

@@ -1,0 +1,127 @@
+.section-header {
+  max-width: 1200px;
+  margin: 40px;
+  padding: 0 10px;
+}
+
+.section-label {
+  color: #db4444;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.section-title {
+  font-size: 32px;
+  font-weight: 700;
+  margin-top: 6px;
+}
+
+.promo-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 40px;
+
+  display: flex;
+  gap:100px;
+}
+
+/* COMMON CARD */
+
+.promo-card {
+  position: relative;
+  background-color: #000000;
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  border-radius: 8px;
+  overflow: hidden;
+
+  display: flex;
+  align-items: flex-start;
+
+  color: white;
+}
+
+/* DARK OVERLAY EFFECT */
+
+.promo-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.7),
+    rgba(0, 0, 0, 0.2)
+  );
+}
+
+.overlay {
+  position: relative;
+  z-index: 2;
+  padding: 20px;
+}
+
+/* LARGE LEFT CARD */
+
+.large {
+  flex: 2;
+  width: 60%;
+  height: 360px;
+}
+
+/* RIGHT SIDE */
+
+.right-cards {
+  flex: 1;
+  display: flex;
+ margin-left: 20px;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.small {
+  height: 170px;
+  width: 400px;
+}
+
+/* TEXT */
+
+.promo-title {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.shop-btn {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 14px;
+
+  border-bottom: 1px solid white;
+
+  cursor: pointer;
+}
+
+.shop-btn:hover {
+  opacity: 0.8;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+
+  .promo-container {
+    flex-direction: column;
+  }
+
+  .large {
+    height: 250px;
+  }
+
+  .small {
+    height: 180px;
+  }
+
+}
