@@ -16,6 +16,11 @@ import Orders from "./customer/pages/Orders";
 // Seller Pages
 import Dashboard from "./seller/pages/Dashboard";
 import ProductList from "./seller/pages/products/ProductList";
+import AddProduct from "./seller/pages/products/AddProduct";
+import EditProduct from "./seller/pages/products/EditProduct";
+import OrdersList from "./seller/pages/orders/OrdersList"; 
+import Profile from "./seller/pages/profile/Profile";
+import Settings from "./seller/pages/settings/Settings"; // <-- Added Settings Import
 
 // Utils
 import ProtectedRoute from "./utils/ProtectedRoute";
@@ -62,6 +67,14 @@ function App() {
       >
         <Route index element={<Dashboard />} />
         <Route path="products" element={<ProductList />} />
+        <Route path="products/add" element={<AddProduct />} />
+        <Route path="products/edit/:id" element={<EditProduct />} />
+        <Route path="orders" element={<OrdersList />} />
+        <Route path="profile" element={<Profile />} /> 
+        
+        {/* ================= INTEGRATED SETTINGS ROUTE ================= */}
+        <Route path="settings" element={<Settings />} /> 
+        
       </Route>
 
     </Routes>
