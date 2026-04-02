@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import ProductForm from "./ProductForm";
-import { createProduct } from "../../../utils/api";
+import { createProduct } from "../../../services/sellerApi";
 import toast from "react-hot-toast";
 
 const AddProduct = () => {
