@@ -11,9 +11,14 @@ import Home from "./customer/pages/Home";
 import Login from "./customer/pages/Login";
 import Signup from "./customer/pages/Signup";
 import ProductDetails from "./customer/pages/ProductDetails";
+import ProductListc from "./customer/pages/ProductListc";
 import Cart from "./customer/pages/Cart";
 import Checkout from "./customer/pages/Checkout";
 import Orders from "./customer/pages/Orders";
+import NotFound from "./customer/pages/NotFound";
+import Wishlist from "./customer/pages/Wishlist";
+import OrderSuccess from "./customer/pages/OrderSuccess";
+
 
 // Seller Pages
 import Dashboard from "./seller/pages/Dashboard";
@@ -45,6 +50,11 @@ function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
+          <Route path="/productlist" element={<ProductListc />} />
+          <Route path="*" element={<NotFound />} />
+          <Route path="/order-success" element={<OrderSuccess />} />
+          <Route path="/wishlist" element={<Wishlist />} />
+          
 
           <Route
             path="/checkout"
@@ -54,6 +64,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+
 
           <Route
             path="/orders"

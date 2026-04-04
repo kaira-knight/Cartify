@@ -1,0 +1,24 @@
+.filter-bar {
+  display: flex;
+  flex-direction: column;
+
+  flex-wrap: wrap;
+
+  gap: 15px;
+
+  background: #eeeeee;
+
+  padding: 40px;
+
+  border-radius: 6px;
+}
+
+.filter-bar select {
+  padding: 8px;
+
+  border: 1px solid #ccc;
+
+  background: white;
+
+  min-width: 150px;
+}

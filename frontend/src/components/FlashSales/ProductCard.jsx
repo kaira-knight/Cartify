@@ -5,6 +5,8 @@ import { IoEyeOutline } from "react-icons/io5";
 import "./ProductCard.css"
 const ProductCard = ({ product }) => {
   return (
+    <div className="products"> 
+    
     <div className="product-card">
 
       {/* Discount */}
@@ -70,6 +72,7 @@ const ProductCard = ({ product }) => {
 
       </div>
 
+    </div>
     </div>
   );
 };

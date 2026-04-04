@@ -53,61 +53,6 @@ const FlashSales = () => {
 
   }, []);
 
-//   const products = [
-//     {
-//       id: 1,
-//       name: "HAVIT HV-G92 Gamepad",
-//       price: 120,
-//       oldPrice: 160,
-//       discount: "-40%",
-//       reviews: 88,
-//       image:
-//         "https://i.imgur.com/1bX5QH6.png"
-//     },
-//     {
-//       id: 2,
-//       name: "AK-900 Wired Keyboard",
-//       price: 960,
-//       oldPrice: 1160,
-//       discount: "-35%",
-//       reviews: 75,
-//       image:
-//         "https://i.imgur.com/3ZQ3Z6H.png"
-//     },
-//     {
-//       id: 3,
-//       name: "IPS LCD Gaming Monitor",
-//       price: 370,
-//       oldPrice: 400,
-//       discount: "-30%",
-//       reviews: 99,
-//       image:
-//         "https://i.imgur.com/7YQ2p8T.png"
-//     },
-//     {
-//       id: 4,
-//       name: "S-Series Comfort Chair",
-//       price: 375,
-//       oldPrice: 400,
-//       discount: "-25%",
-//       reviews: 99,
-//       image:
-//         "https://i.imgur.com/8ZQ9p4L.png"
-//     },
-//     {
-//       id: 5,
-//       name: "Wireless Headphone",
-//       price: 200,
-//       oldPrice: 260,
-//       discount: "-20%",
-//       reviews: 60,
-//       image:
-//         "https://i.imgur.com/Y3Qp7YF.png"
-//     }
-//   ];
-
-  /* Custom Arrow */
-
   function NextArrow(props) {
     const { onClick } = props;
     return (

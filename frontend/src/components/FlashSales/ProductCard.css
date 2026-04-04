@@ -1,8 +1,12 @@
 
 /* ================= PRODUCT CARD ================= */
-
+.products{
+  display: flex;
+  flex-direction: row;
+  width: 5000px;
+}
 .product-card {
-  width: 100%;
+  width: 300px;
   background: #ffffff;
   border-radius: 6px;
   padding: 15px;
