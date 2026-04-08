@@ -2,7 +2,7 @@
 /* ================= PRODUCT CARD ================= */
 .products{
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   width: 5000px;
 }
 .product-card {

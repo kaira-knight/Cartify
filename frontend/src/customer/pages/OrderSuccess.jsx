@@ -5,7 +5,6 @@ import { Check } from "lucide-react";
 const OrderSuccess = () => {
   const navigate = useNavigate();
 
-  // Example dynamic Order ID
   const orderId = "ORD-458921";
 
   return (
